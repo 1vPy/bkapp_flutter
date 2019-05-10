@@ -1,5 +1,5 @@
-import 'package:bkapp_flutter/component/movie/MovieMainPage.dart';
-import 'package:bkapp_flutter/component/user/UserCenterPage.dart';
+import 'package:bkapp_flutter/page/movie/MovieMainPage.dart';
+import 'package:bkapp_flutter/page/user/UserCenterPage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

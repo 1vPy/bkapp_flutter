@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'component/home/HomeDrawer.dart';
-import 'component/movie/MovieMainPage.dart';
-import 'component/shortvideo/ShortVideoPage.dart';
+import 'page/movie/MovieMainPage.dart';
+import 'page/shortvideo/ShortVideoPage.dart';
 
 void main() => runApp(MyApp());
 
