@@ -38,7 +38,7 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Builder(
+  /*      leading: Builder(
             builder: (context) => IconButton(
                 icon: Image.asset(
                   'images/icon_avatar.png',
@@ -47,7 +47,7 @@ class HomePageState extends State<HomePage> {
                 ),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
-                })),
+                })),*/
         title: Text(title),
       ),
       drawer: Drawer(child: HomeDrawer(_selected)),

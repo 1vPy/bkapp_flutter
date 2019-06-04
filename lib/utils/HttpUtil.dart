@@ -10,7 +10,7 @@ class HttpUtil {
 
   HttpUtil._internal() {
     _baseOptions = new BaseOptions(
-        connectTimeout: 15 * 1000, receiveTimeout: 15 * 1000, baseUrl: '');
+        connectTimeout: 15 * 1000, receiveTimeout: 15 * 1000, baseUrl: 'https://api.themoviedb.org/3/');
     _dio = new Dio(_baseOptions);
     _dio.interceptors.add(LogInterceptor(
         request: true,
@@ -25,7 +25,7 @@ class HttpUtil {
     return instance;
   }
 
-  PublishSubject<T> get<T>(String url, {Map<String, String> param}) {
+  PublishSubject<T> get<T>(String url, {Map<String, dynamic> param}) {
     Observable<Response> observable = Observable.fromFuture(_dio.get(url, queryParameters: param));
     PublishSubject<T> publishSubject = PublishSubject();
     observable.listen((res) {
@@ -36,7 +36,7 @@ class HttpUtil {
     return publishSubject;
   }
 
-  PublishSubject<T> post<T>(String url, {Map<String, String> param}) {
+  PublishSubject<T> post<T>(String url, {Map<String, dynamic> param}) {
     Future<Response<T>> future = _dio.post(url, queryParameters: param);
     Observable<Response<T>> observable = Observable.fromFuture(future);
     PublishSubject<T> publishSubject = PublishSubject();
