@@ -55,6 +55,7 @@ flutter:
     - images/icon_movie.png
     - images/icon_music.png
     - images/icon_setting.png
+    - images/movie_placeholder_image.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

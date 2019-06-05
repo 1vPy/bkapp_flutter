@@ -1,5 +1,7 @@
 import 'package:bkapp_flutter/entity/movie/MovieList.dart';
 import 'package:bkapp_flutter/entity/movie/results.dart';
+import 'package:bkapp_flutter/page/movie/MovieDetailPage.dart';
+import 'package:bkapp_flutter/page/user/UserCenterPage.dart';
 import 'package:bkapp_flutter/presenter/movie/MovieUpcomingPresenter.dart';
 import 'package:bkapp_flutter/presenter/movie/impl/MovieUpcomingPresenterImpl.dart';
 import 'package:bkapp_flutter/utils/GenresUtil.dart';
@@ -62,34 +64,43 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
     _movieUpcomingPresenter.requestUpcomingMovie(page);
   }
 
-  String getGenres(List<int> ids) {
+  void _jumpToDetail(Results item) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            MovieDetailPage(item)));
+  }
+
+  String _getGenres(List<int> ids) {
     String genres = '';
+    if (ids.length == 0) {
+      return '无';
+    }
     ids.forEach((int i) {
       genres = genres + GenresUtil.instance.getGenre(i) + '/';
     });
     return genres.substring(0, genres.length - 1);
   }
 
-  Widget itemView(BuildContext context, int index) {
+  Widget _itemView(BuildContext context, int index) {
     return Container(
         height: 120,
-        child: Card(
-          child: Row(
-            children: <Widget>[
-              Container(
-                  child: ClipRRect(
-                borderRadius: BorderRadius.circular(2),
-                child: FadeInImage.assetNetwork(
-                  width: 80,
-                  height: 120,
-                  placeholder: "images/ic_device_image_default.png",
-                  image:
-                      '${Constants.image_prefix}/w200/${_items[index].poster_path}',
-                  fit: BoxFit.cover,
-                ),
-              )),
-              GestureDetector(
-                child: Container(
+        child: GestureDetector(
+          child: Card(
+            child: Row(
+              children: <Widget>[
+                Hero(tag: _items[index].id, child: Container(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(2),
+                      child: FadeInImage.assetNetwork(
+                        width: 80,
+                        height: 120,
+                        placeholder: "images/movie_placeholder_image.png",
+                        image:
+                        '${Constants.image_prefix}/w200/${_items[index].poster_path}',
+                        fit: BoxFit.cover,
+                      ),
+                    ))),
+                Container(
                   margin: EdgeInsets.only(left: 5, top: 5),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +114,7 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
                         style: TextStyle(fontSize: 12),
                       ),
                       Text(
-                        '类型：${getGenres(_items[index].genre_ids)}',
+                        '类型：${_getGenres(_items[index].genre_ids)}',
                         style: TextStyle(fontSize: 12),
                       ),
                       Row(
@@ -132,16 +143,18 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
                       )
                     ],
                   ),
-                ),
-                onTap: () {},
-              )
-            ],
+                )
+              ],
+            ),
+            margin: EdgeInsets.only(left: 10, right: 10, top: 10),
           ),
-          margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+          onTap: () {
+            _jumpToDetail(_items[index]);
+          },
         ));
   }
 
-  Widget createHeader() {
+  Widget _createHeader() {
     return ClassicHeader(
       triggerDistance: 40,
       height: 35,
@@ -162,7 +175,7 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
     );
   }
 
-  Widget createFooter() {
+  Widget _createFooter() {
     return ClassicFooter(
       triggerDistance: 40,
       height: 35,
@@ -174,6 +187,7 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
         color: Colors.white,
       ),
       idleText: '上拉加载',
+      idleIcon: Icon(Icons.arrow_upward),
       loadingIcon: SizedBox(
         width: 15,
         height: 15,
@@ -185,64 +199,75 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
     );
   }
 
-  Widget createComingUpMovie() {
+  Widget _createLoading() {
+    return Center(
+      child: Row(children: <Widget>[
+        SizedBox(
+            width: 20,
+            height: 20,
+            child: CircularProgressIndicator(
+              strokeWidth: 1,
+            )),
+        Container(
+          child: Text(
+            '加载中..',
+          ),
+          margin: EdgeInsets.only(left: 10),
+        )
+      ], mainAxisAlignment: MainAxisAlignment.center),
+    );
+  }
+
+  Widget _createFail() {
+    return Center(
+      child: GestureDetector(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(Icons.error, color: Colors.red),
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              child: Text('请求失败，点击重试'),
+            )
+          ],
+        ),
+        onTap: _onRetry,
+      ),
+    );
+  }
+
+  Widget _createList() {
+    return SmartRefresher(
+      header: _createHeader(),
+      footer: _createFooter(),
+      child: ListView.builder(
+        itemBuilder: _itemView,
+        itemCount: _items.length,
+        controller: _scrollController,
+      ),
+      controller: _refreshController,
+      enablePullUp: true,
+      onLoading: this._onLoading,
+      onRefresh: this._onRefresh,
+    );
+  }
+
+  Widget _createComingUpMovie() {
     if (_items.length == 0) {
       return status == LoadingStatus.Loading
-          ? Center(
-              child: Row(children: <Widget>[
-                SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 1,
-                    )),
-                Container(
-                  child: Text(
-                    '加载中..',
-                  ),
-                  margin: EdgeInsets.only(left: 10),
-                )
-              ], mainAxisAlignment: MainAxisAlignment.center),
-            )
+          ? _createLoading()
           : status == LoadingStatus.Success
               ? Center(child: Text('暂无数据'))
-              : Center(
-                  child: GestureDetector(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(Icons.error, color: Colors.red),
-                        Container(
-                          margin: EdgeInsets.only(left: 10),
-                          child: Text('请求失败，点击重试'),
-                        )
-                      ],
-                    ),
-                    onTap: _onRetry,
-                  ),
-                );
+              : _createFail();
     } else {
-      return SmartRefresher(
-        header: createHeader(),
-        footer: createFooter(),
-        child: ListView.builder(
-          itemBuilder: itemView,
-          itemCount: _items.length,
-          controller: _scrollController,
-        ),
-        controller: _refreshController,
-        enablePullUp: true,
-        onLoading: this._onLoading,
-        onRefresh: this._onRefresh,
-      );
+      return _createList();
     }
-    ;
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return createComingUpMovie();
+    return _createComingUpMovie();
   }
 
   @override

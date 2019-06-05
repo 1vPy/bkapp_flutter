@@ -1,8 +1,8 @@
+import 'package:bkapp_flutter/Constants.dart';
 import 'package:bkapp_flutter/entity/movie/MovieList.dart';
+import 'package:bkapp_flutter/presenter/movie/MovieUpcomingPresenter.dart';
 import 'package:bkapp_flutter/utils/HttpUtil.dart';
 import 'package:bkapp_flutter/view/MovieUpcomingView.dart';
-import '../../../Constants.dart';
-import '../MovieUpcomingPresenter.dart';
 
 class MovieUpcomingPresenterImpl extends MovieUpcomingPresenter {
   MovieUpcomingView view;
