@@ -1,7 +1,7 @@
+import 'package:bkapp_flutter/component/ListHelper.dart';
 import 'package:bkapp_flutter/entity/movie/MovieList.dart';
 import 'package:bkapp_flutter/entity/movie/results.dart';
 import 'package:bkapp_flutter/page/movie/MovieDetailPage.dart';
-import 'package:bkapp_flutter/page/user/UserCenterPage.dart';
 import 'package:bkapp_flutter/presenter/movie/MovieUpcomingPresenter.dart';
 import 'package:bkapp_flutter/presenter/movie/impl/MovieUpcomingPresenterImpl.dart';
 import 'package:bkapp_flutter/utils/GenresUtil.dart';
@@ -154,92 +154,11 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
         ));
   }
 
-  Widget _createHeader() {
-    return ClassicHeader(
-      triggerDistance: 40,
-      height: 35,
-      refreshingText: '正在刷新',
-      completeText: '刷新成功',
-      failedText: '刷新失败',
-      textStyle: TextStyle(color: Colors.white),
-      releaseText: '释放刷新',
-      idleText: '下拉刷新',
-      refreshingIcon: SizedBox(
-        width: 15,
-        height: 15,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-        ),
-      ),
-    );
-  }
-
-  Widget _createFooter() {
-    return ClassicFooter(
-      triggerDistance: 40,
-      height: 35,
-      loadingText: '正在加载',
-      textStyle: TextStyle(color: Colors.white),
-      noDataText: '没有更多了',
-      noMoreIcon: Icon(
-        Icons.all_inclusive,
-        color: Colors.white,
-      ),
-      idleText: '上拉加载',
-      idleIcon: Icon(Icons.arrow_upward),
-      loadingIcon: SizedBox(
-        width: 15,
-        height: 15,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-        ),
-      ),
-    );
-  }
-
-  Widget _createLoading() {
-    return Center(
-      child: Row(children: <Widget>[
-        SizedBox(
-            width: 20,
-            height: 20,
-            child: CircularProgressIndicator(
-              strokeWidth: 1,
-            )),
-        Container(
-          child: Text(
-            '加载中..',
-          ),
-          margin: EdgeInsets.only(left: 10),
-        )
-      ], mainAxisAlignment: MainAxisAlignment.center),
-    );
-  }
-
-  Widget _createFail() {
-    return Center(
-      child: GestureDetector(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(Icons.error, color: Colors.red),
-            Container(
-              margin: EdgeInsets.only(left: 10),
-              child: Text('请求失败，点击重试'),
-            )
-          ],
-        ),
-        onTap: _onRetry,
-      ),
-    );
-  }
 
   Widget _createList() {
     return SmartRefresher(
-      header: _createHeader(),
-      footer: _createFooter(),
+      header: ListHelper.createHeader(),
+      footer: ListHelper.createFooter(),
       child: ListView.builder(
         itemBuilder: _itemView,
         itemCount: _items.length,
@@ -255,10 +174,10 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
   Widget _createComingUpMovie() {
     if (_items.length == 0) {
       return status == LoadingStatus.Loading
-          ? _createLoading()
+          ? ListHelper.createLoading()
           : status == LoadingStatus.Success
               ? Center(child: Text('暂无数据'))
-              : _createFail();
+              : ListHelper.createFail(_onRetry);
     } else {
       return _createList();
     }

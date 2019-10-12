@@ -7,103 +7,64 @@ class MovieMainPage extends StatefulWidget {
   State<StatefulWidget> createState() => MovieMainPageState();
 }
 
-class MovieMainPageState extends State<MovieMainPage> with SingleTickerProviderStateMixin {
-  int currentIndex = 0;
+class MovieMainPageState extends State<MovieMainPage>
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   PageController _controller = PageController(initialPage: 0);
+  TabController _tabController;
 
-  List<BottomNavigationBarItem> getItems() {
-    List<BottomNavigationBarItem> list = new List();
-    list.add(BottomNavigationBarItem(
-        icon: Icon(
-          Icons.equalizer,
-          color: Colors.white,
-        ),
-        activeIcon: Icon(
-          Icons.equalizer,
-          color: Colors.blueAccent,
-        ),
-        title: Text('推荐')));
-    list.add(BottomNavigationBarItem(
-        icon: Icon(
-          Icons.movie,
-          color: Colors.white,
-        ),
-        activeIcon: Icon(
-          Icons.movie,
-          color: Colors.blueAccent,
-        ),
-        title: Text('电影')));
-    list.add(BottomNavigationBarItem(
-        icon: Icon(
-          Icons.tv,
-          color: Colors.white,
-        ),
-        activeIcon: Icon(
-          Icons.tv,
-          color: Colors.blueAccent,
-        ),
-        title: Text('电视剧')));
-    list.add(BottomNavigationBarItem(
-        icon: Icon(
-          Icons.people,
-          color: Colors.white,
-        ),
-        activeIcon: Icon(
-          Icons.people,
-          color: Colors.blueAccent,
-        ),
-        title: Text('影星')));
-    list.add(BottomNavigationBarItem(
-        icon: Icon(
-          Icons.person,
-          color: Colors.white,
-        ),
-        activeIcon: Icon(
-          Icons.person,
-          color: Colors.blueAccent,
-        ),
-        title: Text('我的')));
+  List<Tab> getItems() {
+    List<Tab> list = new List();
+    list.add(Tab(
+      text: "近期热播",
+    ));
+    list.add(Tab(
+      text: "即将上线",
+    ));
     return list;
   }
 
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
   }
 
-  void onSelectItem(int index) {
+  void onTabTap(int index) {
     _controller.animateToPage(index,
-        duration: Duration(milliseconds: 300), curve: Curves.ease);
-    setState(() {
-      currentIndex = index;
-    });
+        duration: Duration(milliseconds: 300), curve: Curves.linear);
   }
 
+  void onPageChange(index) {
+    _tabController.animateTo(index, duration: Duration(milliseconds: 300));
+  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.blueGrey,
+        title: TabBar(
+          tabs: getItems(),
+          controller: _tabController,
+          indicatorSize: TabBarIndicatorSize.label,
+          onTap: (index) {
+            onTabTap(index);
+          },
+        ),
+      ),
       body: PageView(
-          physics: NeverScrollableScrollPhysics(),
-          children: <Widget>[
-            MovieUpcomingPage(),
-            MovieUpcomingPage(),
-            MovieUpcomingPage(),
-            MovieUpcomingPage(),
-            MovieUpcomingPage()
-          ],
-          controller: _controller),
-      bottomNavigationBar: BottomNavigationBar(
-          items: getItems(),
-          currentIndex: currentIndex,
-          onTap: onSelectItem,
-          backgroundColor: Colors.black54,
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
-          elevation: 5,
-          type: BottomNavigationBarType.shifting,
-          selectedItemColor: Colors.blueAccent,
-          unselectedItemColor: Colors.white),
+        physics: PageScrollPhysics(parent: BouncingScrollPhysics()),
+        children: <Widget>[MovieUpcomingPage(), MovieUpcomingPage()],
+        controller: _controller,
+        onPageChanged: (index) {
+          onPageChange(index);
+        },
+      ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

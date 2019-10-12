@@ -12,25 +12,25 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   var title = '电影';
+  PageController _pageController = PageController(initialPage: 0);
 
-  Widget currentPage = MovieMainPage();
+  Widget _moviePage = MovieMainPage();
+  Widget _shortVideoPage = ShortVideoPage();
 
   void _selected(id) {
     switch (id) {
       case 0:
         setState(() {
           title = '电影';
-          currentPage = MovieMainPage();
         });
         break;
       case 1:
         setState(() {
           title = '短视频';
-          currentPage = ShortVideoPage();
         });
         break;
     }
-
+    _pageController.jumpToPage(id);
     Navigator.pop(context);
   }
 
@@ -38,20 +38,14 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-  /*      leading: Builder(
-            builder: (context) => IconButton(
-                icon: Image.asset(
-                  'images/icon_avatar.png',
-                  width: 40,
-                  height: 40,
-                ),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                })),*/
         title: Text(title),
       ),
       drawer: Drawer(child: HomeDrawer(_selected)),
-      body: currentPage,
+      body: PageView(
+        physics: NeverScrollableScrollPhysics(),
+        children: <Widget>[_moviePage, _shortVideoPage],
+        controller: _pageController,
+      ),
     );
   }
 }
@@ -62,12 +56,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.blue,
-        primaryColor: Colors.blue,
-        accentColor: const Color(0xFF64ffda),
-        canvasColor: const Color(0xFF303030),
-      ),
+          brightness: Brightness.dark,
+          primarySwatch: Colors.blue,
+          primaryColor: Colors.blue,
+          accentColor: const Color(0xFF64ffda),
+          canvasColor: const Color(0xFF303030),
+          pageTransitionsTheme: PageTransitionsTheme(builders: {
+            TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
+            TargetPlatform.android: FadeUpwardsPageTransitionsBuilder()
+          })),
       home: HomePage(),
     );
   }

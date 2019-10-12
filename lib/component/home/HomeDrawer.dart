@@ -23,17 +23,17 @@ class HomeDrawerState extends State<HomeDrawer> {
       children: <Widget>[
         HeaderDrawer(),
         ListTile(title: Text('分类')),
-        ItemDrawer(0, '电影', 'images/icon_movie.png', selected),
-        ItemDrawer(1, '短视频', 'images/icon_music.png', selected),
+        ItemDrawer(0, '电影', Icon(Icons.movie), selected),
+        ItemDrawer(1, '短视频', Icon(Icons.music_video), selected),
         Divider(
           color: Colors.grey,
           height: 1.0,
         ),
         ListTile(title: Text('选项')),
-        ItemDrawer(2, '我的收藏', 'images/icon_collection.png', selected),
-        ItemDrawer(3, '系统设置', 'images/icon_setting.png', selected),
-        ItemDrawer(4, '问题反馈', 'images/icon_feedback.png', selected),
-        ItemDrawer(5, '关于', 'images/icon_about.png', selected),
+        ItemDrawer(2, '我的收藏', Icon(Icons.collections_bookmark), selected),
+        ItemDrawer(3, '系统设置', Icon(Icons.settings), selected),
+        ItemDrawer(4, '问题反馈', Icon(Icons.message), selected),
+        ItemDrawer(5, '关于', Icon(Icons.info), selected),
       ],
     );
   }
@@ -55,7 +55,7 @@ class ItemDrawer extends StatefulWidget {
 class ItemDrawerState extends State<ItemDrawer> {
   var id = 0;
   var title = '';
-  var icon = '';
+  var icon;
   var selected = false;
   ValueChanged<int> onSelected;
 
@@ -64,11 +64,7 @@ class ItemDrawerState extends State<ItemDrawer> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Image.asset(
-        icon,
-        width: 25,
-        height: 25,
-      ),
+      leading: icon,
       title: Text(title),
       selected: selected,
       onTap: () {
@@ -123,8 +119,9 @@ class HeaderDrawerState extends State<HeaderDrawer> {
                       child: GestureDetector(
                         child: CircleAvatar(
                             child: accountAvatar.isEmpty
-                                ? Image.asset(
-                                    'images/icon_avatar.png',
+                                ? Icon(
+                                    Icons.account_circle,
+                                    size: 40,
                                   )
                                 : Image.network(
                                     accountAvatar,

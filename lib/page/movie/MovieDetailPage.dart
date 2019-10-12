@@ -1,6 +1,5 @@
 import 'package:bkapp_flutter/Constants.dart';
 import 'package:bkapp_flutter/entity/movie/detail/MovieDetail.dart';
-import 'package:bkapp_flutter/entity/movie/detail/genres.dart';
 import 'package:bkapp_flutter/entity/movie/results.dart';
 import 'package:bkapp_flutter/presenter/movie/MovieDetailPresenter.dart';
 import 'package:bkapp_flutter/presenter/movie/impl/MovieDetailPresenterImpl.dart';
@@ -16,7 +15,6 @@ class MovieDetailPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return MovieDetailPageState();
   }
 }
@@ -28,7 +26,6 @@ class MovieDetailPageState extends State<MovieDetailPage>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _movieDetailPresenter = MovieDetailPresenterImpl(this);
     _movieDetailPresenter.requestMovieDetail(widget.item.id);
@@ -155,7 +152,6 @@ class MovieDetailPageState extends State<MovieDetailPage>
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         body: NestedScrollView(
             headerSliverBuilder: _sliverBuilder,
