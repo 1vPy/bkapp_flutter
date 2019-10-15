@@ -5,7 +5,6 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class ListHelper {
   static Widget createHeader() {
     return ClassicHeader(
-      triggerDistance: 40,
       height: 35,
       refreshingText: '正在刷新',
       completeText: '刷新成功',
@@ -26,7 +25,6 @@ class ListHelper {
 
   static Widget createFooter() {
     return ClassicFooter(
-      triggerDistance: 40,
       height: 35,
       loadingText: '正在加载',
       textStyle: TextStyle(color: Colors.white),

@@ -4,7 +4,7 @@ import 'package:bkapp_flutter/entity/movie/results.dart';
 import 'package:bkapp_flutter/presenter/movie/MovieDetailPresenter.dart';
 import 'package:bkapp_flutter/presenter/movie/impl/MovieDetailPresenterImpl.dart';
 import 'package:bkapp_flutter/utils/GenresUtil.dart';
-import 'package:bkapp_flutter/view/MovieDetailView.dart';
+import 'package:bkapp_flutter/view/movie/MovieDetailView.dart';
 import 'package:dio/src/dio_error.dart';
 import 'package:flutter/material.dart';
 

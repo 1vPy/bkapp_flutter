@@ -5,7 +5,7 @@ import 'package:bkapp_flutter/page/movie/MovieDetailPage.dart';
 import 'package:bkapp_flutter/presenter/movie/MovieUpcomingPresenter.dart';
 import 'package:bkapp_flutter/presenter/movie/impl/MovieUpcomingPresenterImpl.dart';
 import 'package:bkapp_flutter/utils/GenresUtil.dart';
-import 'package:bkapp_flutter/view/MovieUpcomingView.dart';
+import 'package:bkapp_flutter/view/movie/MovieUpcomingView.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -25,7 +25,6 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
     with AutomaticKeepAliveClientMixin
     implements MovieUpcomingView {
   RefreshController _refreshController;
-  ScrollController _scrollController;
   List<Results> _items = [];
   MovieUpcomingPresenter _movieUpcomingPresenter;
   int page = 1;
@@ -36,8 +35,6 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
   void initState() {
     super.initState();
     _refreshController = RefreshController();
-    _scrollController = ScrollController();
-    _refreshController.scrollController = _scrollController;
     _movieUpcomingPresenter = MovieUpcomingPresenterImpl(this);
     _movieUpcomingPresenter.requestUpcomingMovie(page);
   }
@@ -65,9 +62,8 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
   }
 
   void _jumpToDetail(Results item) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>
-            MovieDetailPage(item)));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => MovieDetailPage(item)));
   }
 
   String _getGenres(List<int> ids) {
@@ -88,15 +84,17 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
           child: Card(
             child: Row(
               children: <Widget>[
-                Hero(tag: _items[index].id, child: Container(
-                    child: ClipRRect(
+                Hero(
+                    tag: _items[index].id,
+                    child: Container(
+                        child: ClipRRect(
                       borderRadius: BorderRadius.circular(2),
                       child: FadeInImage.assetNetwork(
                         width: 80,
                         height: 120,
                         placeholder: "images/movie_placeholder_image.png",
                         image:
-                        '${Constants.image_prefix}/w200/${_items[index].poster_path}',
+                            '${Constants.image_prefix}/w200/${_items[index].poster_path}',
                         fit: BoxFit.cover,
                       ),
                     ))),
@@ -154,20 +152,23 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
         ));
   }
 
-
   Widget _createList() {
-    return SmartRefresher(
-      header: ListHelper.createHeader(),
-      footer: ListHelper.createFooter(),
-      child: ListView.builder(
-        itemBuilder: _itemView,
-        itemCount: _items.length,
-        controller: _scrollController,
+    return RefreshConfiguration(
+      headerTriggerDistance: 35,
+      hideFooterWhenNotFull: true,
+      maxOverScrollExtent: 35,
+      child: SmartRefresher(
+        header: ListHelper.createHeader(),
+        footer: ListHelper.createFooter(),
+        child: ListView.builder(
+          itemBuilder: _itemView,
+          itemCount: _items.length,
+        ),
+        controller: _refreshController,
+        enablePullUp: true,
+        onLoading: this._onLoading,
+        onRefresh: this._onRefresh,
       ),
-      controller: _refreshController,
-      enablePullUp: true,
-      onLoading: this._onLoading,
-      onRefresh: this._onRefresh,
     );
   }
 
