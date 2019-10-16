@@ -56,7 +56,7 @@ class HomePageState extends State<HomePage> {
   }
 
   void toSearchPage(){
-    
+
   }
 }
 
