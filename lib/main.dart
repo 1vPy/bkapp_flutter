@@ -39,6 +39,12 @@ class HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search, size: 30),
+            onPressed: () {},
+          ),
+        ],
       ),
       drawer: Drawer(child: HomeDrawer(_selected)),
       body: PageView(
@@ -47,6 +53,10 @@ class HomePageState extends State<HomePage> {
         controller: _pageController,
       ),
     );
+  }
+
+  void toSearchPage(){
+    
   }
 }
 
