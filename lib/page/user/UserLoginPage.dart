@@ -53,7 +53,8 @@ class UserLoginPageState extends State<UserLoginPage> implements UserLoginView {
                       size: 30,
                     ),
                     labelText: '用户名',
-                    border: OutlineInputBorder()),
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue)),
+                    border: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue))),
                 onChanged: (value) {
                   _username = value;
                 },
@@ -67,16 +68,22 @@ class UserLoginPageState extends State<UserLoginPage> implements UserLoginView {
                         size: 30,
                       ),
                       labelText: '密码',
-                      border: OutlineInputBorder()),
+                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue)),
+                      border: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue))),
                   obscureText: true,
                   onChanged: (value) {
                     _password = value;
                   },
                 ),
               ),
-              RaisedButton(
-                child: Text('登录'),
-                onPressed: this.onUserLogin,
+              Container(
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.only(top: 40),
+                height: 40,
+                child: RaisedButton(
+                  child: Text('登录'),
+                  onPressed: this.onUserLogin,
+                ),
               )
             ],
           ),

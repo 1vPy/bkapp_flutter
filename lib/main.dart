@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
           primarySwatch: Colors.blue,
           primaryColor: Colors.blue,
-          accentColor: const Color(0xFF64ffda),
+          accentColor: Colors.blue,
           canvasColor: const Color(0xFF303030),
           pageTransitionsTheme: PageTransitionsTheme(builders: {
             TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
