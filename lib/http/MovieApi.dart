@@ -6,11 +6,7 @@ import 'package:rxdart/rxdart.dart';
 
 //Created by 1vPy on 2019/10/16.
 class MovieApi {
-  static final MovieApi _instance = MovieApi._internal();
-
-  static MovieApi getInstance() {
-    return _instance;
-  }
+  static final MovieApi instance = MovieApi._internal();
 
   MovieApi._internal();
 

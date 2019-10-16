@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-//Created by 1vPy on 2019/10/16.
 class SnackBarUtil {
   static SnackBarUtil _instance;
 

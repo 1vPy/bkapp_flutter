@@ -9,7 +9,7 @@ class MovieUpcomingPresenterImpl implements MovieUpcomingPresenter {
 
   @override
   void requestUpcomingMovie(int page) {
-    MovieApi.getInstance().getUpcomingMovie(page).listen((response){
+    MovieApi.instance.getUpcomingMovie(page).listen((response){
       view.requestMovieUpcomingSuccess(response);
     },onError: (error){
       view.requestMovieUpcomingFail(error);

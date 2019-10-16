@@ -10,7 +10,7 @@ class MovieDetailPresenterImpl implements MovieDetailPresenter {
 
   @override
   void requestMovieDetail(int movieId) {
-    MovieApi.getInstance().getMovieDetail(movieId).listen((response){
+    MovieApi.instance.getMovieDetail(movieId).listen((response){
       view.requestMovieDetailSuccess(response);
     },onError: (error){
       view.requestMovieDetailFail(error);

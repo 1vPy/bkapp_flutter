@@ -10,7 +10,7 @@ class MovieNowPlayingPresenterImpl implements MovieNowPlayingPresenter {
 
   @override
   void requestNowPlayingMovie(int page) {
-    MovieApi.getInstance().getNowPlayingMovie(page).listen((response) {
+    MovieApi.instance.getNowPlayingMovie(page).listen((response) {
       view.requestMovieNowPlayingSuccess(response);
     }, onError: (error) {
       view.requestMovieNowPlayingFail(error);

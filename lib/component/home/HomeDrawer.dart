@@ -1,7 +1,10 @@
-import 'package:bkapp_flutter/page/movie/MovieMainPage.dart';
+import 'package:bkapp_flutter/entity/user/UserEntity.dart';
+import 'package:bkapp_flutter/event/UserLoginStatusChangeEvent.dart';
 import 'package:bkapp_flutter/page/user/UserCenterPage.dart';
+import 'package:bkapp_flutter/page/user/UserLoginPage.dart';
+import 'package:bkapp_flutter/utils/StorageUtil.dart';
+import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 //Created by 1vPy on 2019/10/16.
 class HomeDrawer extends StatefulWidget {
@@ -81,21 +84,28 @@ class HeaderDrawer extends StatefulWidget {
 }
 
 class HeaderDrawerState extends State<HeaderDrawer> {
-  var accountName = '';
-  var accountEmail = '';
-  var accountAvatar = '';
+  UserEntity _userEntity;
 
   @override
   void initState() {
     super.initState();
+    getUserInfo();
+  }
+
+  void registerEvent() {
+    EventBus().on<UserLoginStatusChangeEvent>().listen((event) {
+      getUserInfo();
+    });
   }
 
   void getUserInfo() async {
-    SharedPreferences _sharedPreferences =
-        await SharedPreferences.getInstance();
-    accountName = _sharedPreferences.getString('accountName');
-    accountEmail = _sharedPreferences.getString('accountEmail');
-    accountAvatar = _sharedPreferences.getString('accountAvatar');
+    UserEntity userEntity = await StorageUtil.instance.getUserInfo();
+    if (userEntity == null) {
+      return;
+    }
+    setState(() {
+      _userEntity = userEntity;
+    });
   }
 
   @override
@@ -119,36 +129,42 @@ class HeaderDrawerState extends State<HeaderDrawer> {
                       alignment: AlignmentDirectional.center,
                       child: GestureDetector(
                         child: CircleAvatar(
-                            child: accountAvatar.isEmpty
+                            child: _userEntity?.userHeader?.url?.isEmpty ?? true
                                 ? Icon(
                                     Icons.account_circle,
                                     size: 40,
                                   )
                                 : Image.network(
-                                    accountAvatar,
+                                    _userEntity?.userHeader?.url ?? '',
                                   )),
-                        onTap: () {
-                          Navigator.of(context).pop();
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => UserCenterPage()));
-                        },
+                        onTap: this.toUserCenter,
                       )),
                   flex: 2,
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 10.0, bottom: 15.0),
                   child: GestureDetector(
-                      child: Text(accountName.isEmpty ? '点击登录' : accountName,
+                      child: Text(
+                          _userEntity?.username?.isEmpty ?? true
+                              ? '点击登录'
+                              : _userEntity?.username,
                           style: TextStyle(fontSize: 13)),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => UserCenterPage()));
-                      }),
+                      onTap: this.toUserCenter),
                 )
               ],
             )
           ],
         ));
+  }
+
+  void toUserCenter() {
+    Navigator.of(context).pop();
+    if (_userEntity == null) {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => UserLoginPage()));
+    } else {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => UserCenterPage()));
+    }
   }
 }
