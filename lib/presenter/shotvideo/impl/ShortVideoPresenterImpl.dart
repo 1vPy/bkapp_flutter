@@ -5,6 +5,7 @@ import 'package:bkapp_flutter/utils/HttpUtil.dart';
 import 'package:bkapp_flutter/view/shortvideo/ShortVideoView.dart';
 import 'package:dio/dio.dart';
 
+//Created by 1vPy on 2019/10/16.
 class ShortVideoPresenterImpl implements ShortVideoPresenter {
   ShortVideoView view;
 

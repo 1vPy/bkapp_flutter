@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:bkapp_flutter/Constants.dart';
 import 'package:bkapp_flutter/component/ListHelper.dart';
 import 'package:bkapp_flutter/entity/enum/LoadingStatus.dart';
@@ -14,6 +12,7 @@ import 'package:dio/src/dio_error.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+//Created by 1vPy on 2019/10/16.
 class MovieNowPlayingPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => MovieNowPlayingPageState();

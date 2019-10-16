@@ -2,6 +2,7 @@ import 'package:bkapp_flutter/Constants.dart';
 import 'package:dio/dio.dart';
 import 'package:rxdart/rxdart.dart';
 
+//Created by 1vPy on 2019/10/16.
 class HttpUtil {
   static final HttpUtil _instance = HttpUtil._internal();
   Dio _dio;

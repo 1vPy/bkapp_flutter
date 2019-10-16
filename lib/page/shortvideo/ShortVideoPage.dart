@@ -1,15 +1,13 @@
-import 'dart:math';
-
 import 'package:bkapp_flutter/entity/shortvideo/ShortVideoList.dart';
+import 'package:bkapp_flutter/entity/shortvideo/item_list.dart';
 import 'package:bkapp_flutter/presenter/shotvideo/ShortVideoPresenter.dart';
 import 'package:bkapp_flutter/presenter/shotvideo/impl/ShortVideoPresenterImpl.dart';
 import 'package:bkapp_flutter/view/shortvideo/ShortVideoView.dart';
 import 'package:dio/src/dio_error.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:video_player/video_player.dart';
-import 'package:bkapp_flutter/entity/shortvideo/item_list.dart';
 
+//Created by 1vPy on 2019/10/16.
 class ShortVideoPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => ShortVideoPageState();

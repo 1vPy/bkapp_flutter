@@ -4,6 +4,7 @@ import 'package:bkapp_flutter/entity/movie/detail/MovieDetail.dart';
 import 'package:bkapp_flutter/utils/HttpUtil.dart';
 import 'package:rxdart/rxdart.dart';
 
+//Created by 1vPy on 2019/10/16.
 class MovieApi {
   static final MovieApi _instance = MovieApi._internal();
 

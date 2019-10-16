@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
+//Created by 1vPy on 2019/10/16.
 class UserLoginPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => UserLoginPageState();
 }
 
 class UserLoginPageState extends State<UserLoginPage> {
-  var _username;
-  var _password;
+  String _username;
+  String _password;
 
+  void onUserLogin() {
 
-  void onUserLogin () {
-      
   }
 
   @override
@@ -20,13 +20,23 @@ class UserLoginPageState extends State<UserLoginPage> {
       child: Column(
         children: <Widget>[
           TextFormField(
-            decoration: InputDecoration(hintText: '用户名'),
+            decoration: InputDecoration(
+                prefixIcon: Icon(
+                  Icons.account_circle,
+                  size: 13,
+                ),
+                hintText: '用户名'),
             onSaved: (value) {
               _username = value;
             },
           ),
           TextFormField(
-            decoration: InputDecoration(hintText: '密码'),
+            decoration: InputDecoration(
+                prefixIcon: Icon(
+                  Icons.lock,
+                  size: 13,
+                ),
+                hintText: '密码'),
             obscureText: true,
             onSaved: (value) {
               _password = value;

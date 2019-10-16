@@ -8,6 +8,7 @@ import 'package:bkapp_flutter/view/movie/MovieDetailView.dart';
 import 'package:dio/src/dio_error.dart';
 import 'package:flutter/material.dart';
 
+//Created by 1vPy on 2019/10/16.
 class MovieDetailPage extends StatefulWidget {
   final Results item;
   final String tag;

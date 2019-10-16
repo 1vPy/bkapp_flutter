@@ -1,8 +1,8 @@
 import 'package:bkapp_flutter/page/movie/MovieNowPlayingPage.dart';
 import 'package:bkapp_flutter/page/movie/MovieUpcomingPage.dart';
-import 'package:bkapp_flutter/utils/SnackBarUtil.dart';
 import 'package:flutter/material.dart';
 
+//Created by 1vPy on 2019/10/16.
 class MovieMainPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => MovieMainPageState();
