@@ -33,4 +33,15 @@ class GenresUtil {
   String getGenre(int key) {
     return map.containsKey(key) ? map[key] : "";
   }
+
+  String id2Genres(List<int> ids) {
+    String genres = '';
+    if (ids.length == 0) {
+      return '无';
+    }
+    ids.forEach((int i) {
+      genres = genres + getGenre(i) + '/';
+    });
+    return genres.substring(0, genres.length - 1);
+  }
 }

@@ -5,7 +5,7 @@ import 'package:bkapp_flutter/utils/HttpUtil.dart';
 import 'package:bkapp_flutter/view/shortvideo/ShortVideoView.dart';
 import 'package:dio/dio.dart';
 
-class ShortVideoPresenterImpl extends ShortVideoPresenter {
+class ShortVideoPresenterImpl implements ShortVideoPresenter {
   ShortVideoView view;
 
   ShortVideoPresenterImpl(this.view);

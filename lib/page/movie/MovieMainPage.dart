@@ -1,3 +1,4 @@
+import 'package:bkapp_flutter/page/movie/MovieNowPlayingPage.dart';
 import 'package:bkapp_flutter/page/movie/MovieUpcomingPage.dart';
 import 'package:bkapp_flutter/utils/SnackBarUtil.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +57,7 @@ class MovieMainPageState extends State<MovieMainPage>
       ),
       body: PageView(
         physics: PageScrollPhysics(parent: BouncingScrollPhysics()),
-        children: <Widget>[MovieUpcomingPage(), MovieUpcomingPage()],
+        children: <Widget>[MovieUpcomingPage(), MovieNowPlayingPage()],
         controller: _controller,
         onPageChanged: (index) {
           onPageChange(index);

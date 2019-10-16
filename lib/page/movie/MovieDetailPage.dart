@@ -10,8 +10,9 @@ import 'package:flutter/material.dart';
 
 class MovieDetailPage extends StatefulWidget {
   final Results item;
+  final String tag;
 
-  MovieDetailPage(this.item);
+  MovieDetailPage(this.item, this.tag);
 
   @override
   State<StatefulWidget> createState() {
@@ -41,7 +42,7 @@ class MovieDetailPageState extends State<MovieDetailPage>
             collapseMode: CollapseMode.pin,
             title: Text(widget.item.title),
             background: FadeInImage.assetNetwork(
-              fadeInDuration: Duration(seconds: 2),
+                fadeInDuration: Duration(seconds: 2),
                 placeholder: 'images/movie_placeholder_image.png',
                 image:
                     '${Constants.image_prefix}w500/${widget.item.backdrop_path}',
@@ -50,23 +51,12 @@ class MovieDetailPageState extends State<MovieDetailPage>
     ];
   }
 
-  String _getGenres(List<int> ids) {
-    String genres = '';
-    if (ids.length == 0) {
-      return '无';
-    }
-    ids.forEach((int i) {
-      genres = genres + GenresUtil.instance.getGenre(i) + '/';
-    });
-    return genres.substring(0, genres.length - 1);
-  }
-
   Widget _createMovieDetailCard() {
     return Card(
       child: Row(
         children: <Widget>[
           Hero(
-              tag: widget.item.id,
+              tag: widget.tag,
               child: Container(
                   child: ClipRRect(
                 borderRadius: BorderRadius.circular(2),
@@ -93,7 +83,7 @@ class MovieDetailPageState extends State<MovieDetailPage>
                   style: TextStyle(fontSize: 12),
                 ),
                 Text(
-                  '类型：${_getGenres(widget.item.genre_ids)}',
+                  '类型：${GenresUtil.instance.id2Genres(widget.item.genre_ids)}',
                   style: TextStyle(fontSize: 12),
                 ),
                 Row(

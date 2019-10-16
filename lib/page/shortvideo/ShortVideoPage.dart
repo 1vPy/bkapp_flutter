@@ -6,6 +6,7 @@ import 'package:bkapp_flutter/presenter/shotvideo/impl/ShortVideoPresenterImpl.d
 import 'package:bkapp_flutter/view/shortvideo/ShortVideoView.dart';
 import 'package:dio/src/dio_error.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:video_player/video_player.dart';
 import 'package:bkapp_flutter/entity/shortvideo/item_list.dart';
 
@@ -19,6 +20,7 @@ class ShortVideoPageState extends State<ShortVideoPage>
   // VideoPlayerController _videoPlayerController = VideoPlayerController.network(
   //     'http://baobab.kaiyanapp.com/api/v1/playUrl?vid=104625&resourceType=video&editionType=default&source=aliyun');
   ShortVideoPresenter _shortVideoPresenter;
+  RefreshController _refreshController;
   List<ItemList> _items = [];
   int _currentStart = 1;
   bool _isRefreshing = false;
@@ -26,6 +28,7 @@ class ShortVideoPageState extends State<ShortVideoPage>
   @override
   void initState() {
     super.initState();
+    _refreshController = RefreshController();
     _shortVideoPresenter = ShortVideoPresenterImpl(this);
     _shortVideoPresenter.getShortVideo(_currentStart, 10);
   }
@@ -56,9 +59,10 @@ class ShortVideoPageState extends State<ShortVideoPage>
   void onPageChanged(index) {
     if (index == _items.length - 1) {
       _shortVideoPresenter.getShortVideo(_currentStart + 10, 10);
+      _refreshController.requestRefresh(needMove: false);
       setState(() {
         _currentStart = _currentStart + 10;
-        _isRefreshing = true;
+        _isLoading = true;
       });
     }
   }
@@ -91,10 +95,11 @@ class ShortVideoPageState extends State<ShortVideoPage>
       its.addAll(shortVideoList.itemList);
       setState(() {
         _items = its;
+        _isLoading = false;
       });
-      _isRefreshing = false;
+      _refreshController.refreshCompleted();
     } else {
-       setState(() {
+      setState(() {
         _items = shortVideoList.itemList;
       });
     }

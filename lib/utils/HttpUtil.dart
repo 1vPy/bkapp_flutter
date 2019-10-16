@@ -48,9 +48,6 @@ class HttpUtil {
         error: true));
   }
 
-  factory HttpUtil() {
-    return _instance;
-  }
 
   Observable<Response<T>> get<T>(String url,
       {Map<String, dynamic> param, Options options}) {

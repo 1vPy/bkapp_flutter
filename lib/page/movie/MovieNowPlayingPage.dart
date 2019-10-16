@@ -1,33 +1,30 @@
+import 'dart:math';
+
+import 'package:bkapp_flutter/Constants.dart';
 import 'package:bkapp_flutter/component/ListHelper.dart';
 import 'package:bkapp_flutter/entity/enum/LoadingStatus.dart';
 import 'package:bkapp_flutter/entity/movie/MovieList.dart';
 import 'package:bkapp_flutter/entity/movie/results.dart';
 import 'package:bkapp_flutter/page/movie/MovieDetailPage.dart';
-import 'package:bkapp_flutter/presenter/movie/MovieUpcomingPresenter.dart';
-import 'package:bkapp_flutter/presenter/movie/impl/MovieUpcomingPresenterImpl.dart';
+import 'package:bkapp_flutter/presenter/movie/MovieNowPlayingPresenter.dart';
+import 'package:bkapp_flutter/presenter/movie/impl/MovieNowPlayingPresenterImpl.dart';
 import 'package:bkapp_flutter/utils/GenresUtil.dart';
-import 'package:bkapp_flutter/view/movie/MovieUpcomingView.dart';
-import 'package:dio/dio.dart';
+import 'package:bkapp_flutter/view/movie/MovieNowPlayingView.dart';
+import 'package:dio/src/dio_error.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../Constants.dart';
-
-class MovieUpcomingPage extends StatefulWidget {
-  final MovieUpcomingPageState state = MovieUpcomingPageState();
-
+class MovieNowPlayingPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {
-    return state;
-  }
+  State<StatefulWidget> createState() => MovieNowPlayingPageState();
 }
 
-class MovieUpcomingPageState extends State<MovieUpcomingPage>
+class MovieNowPlayingPageState extends State<MovieNowPlayingPage>
     with AutomaticKeepAliveClientMixin
-    implements MovieUpcomingView {
+    implements MovieNowPlayingView {
   RefreshController _refreshController;
   List<Results> _items = [];
-  MovieUpcomingPresenter _movieUpcomingPresenter;
+  MovieNowPlayingPresenter _movieNowPlayingPresenter;
   int page = 1;
 
   LoadingStatus status = LoadingStatus.Loading;
@@ -36,8 +33,8 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
   void initState() {
     super.initState();
     _refreshController = RefreshController();
-    _movieUpcomingPresenter = MovieUpcomingPresenterImpl(this);
-    _movieUpcomingPresenter.requestUpcomingMovie(page);
+    _movieNowPlayingPresenter = MovieNowPlayingPresenterImpl(this);
+    _movieNowPlayingPresenter.requestNowPlayingMovie(page);
   }
 
   Widget _itemView(BuildContext context, int index) {
@@ -48,7 +45,7 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
             child: Row(
               children: <Widget>[
                 Hero(
-                    tag: 'upComing${_items[index].id}',
+                    tag: 'nowPlaying${_items[index].id}',
                     child: Container(
                         child: ClipRRect(
                       borderRadius: BorderRadius.circular(2),
@@ -117,25 +114,23 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
 
   Widget _createList() {
     return RefreshConfiguration(
-      headerTriggerDistance: 35,
-      hideFooterWhenNotFull: true,
-      maxOverScrollExtent: 35,
+      headerTriggerDistance: 40,
       child: SmartRefresher(
         header: ListHelper.createHeader(),
         footer: ListHelper.createFooter(),
+        enablePullUp: true,
         child: ListView.builder(
-          itemBuilder: _itemView,
+          itemBuilder: this._itemView,
           itemCount: _items.length,
         ),
-        controller: _refreshController,
-        enablePullUp: true,
-        onLoading: this._onLoading,
-        onRefresh: this._onRefresh,
+        onLoading: this._onRefresh,
+        onRefresh: this._onLoading,
+        controller: this._refreshController,
       ),
     );
   }
 
-  Widget _createComingUpMovie() {
+  Widget _createNowPlayingMovie() {
     if (_items.length == 0) {
       return status == LoadingStatus.Loading
           ? ListHelper.createLoading()
@@ -150,21 +145,21 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return _createComingUpMovie();
+    return _createNowPlayingMovie();
   }
 
   void _onRefresh() {
     setState(() {
       page = 1;
     });
-    _movieUpcomingPresenter.requestUpcomingMovie(page);
+    _movieNowPlayingPresenter.requestNowPlayingMovie(page);
   }
 
   void _onLoading() {
     setState(() {
-      page = ++page;
+      ++page;
     });
-    _movieUpcomingPresenter.requestUpcomingMovie(page);
+    _movieNowPlayingPresenter.requestNowPlayingMovie(page);
   }
 
   void _onRetry() {
@@ -172,20 +167,20 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
       status = LoadingStatus.Loading;
       page = 1;
     });
-    _movieUpcomingPresenter.requestUpcomingMovie(page);
+    _movieNowPlayingPresenter.requestNowPlayingMovie(page);
   }
 
   void _toDetail(Results item) {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => MovieDetailPage(item, 'upComing${item.id}')));
+        builder: (context) => MovieDetailPage(item, 'nowPlaying${item.id}')));
   }
 
   @override
-  void requestMovieUpcomingFail(DioError error) {
+  void requestMovieNowPlayingFail(DioError error) {
     if (_refreshController.isRefresh) {
       _refreshController.refreshFailed();
     } else if (_refreshController.isLoading) {
-      _refreshController.loadComplete();
+      _refreshController.loadFailed();
     } else {
       setState(() {
         status = LoadingStatus.Fail;
@@ -194,7 +189,7 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
   }
 
   @override
-  void requestMovieUpcomingSuccess(MovieList movieList) {
+  void requestMovieNowPlayingSuccess(MovieList movieList) {
     if (_refreshController.isRefresh) {
       setState(() {
         _items = movieList.results;
@@ -209,7 +204,6 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
       _refreshController.loadComplete();
     } else {
       setState(() {
-        status = LoadingStatus.Success;
         _items = movieList.results;
       });
     }

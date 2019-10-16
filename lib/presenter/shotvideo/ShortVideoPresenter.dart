@@ -1,3 +1,3 @@
-abstract class ShortVideoPresenter {
-  void getShortVideo(int start, int num);
+class ShortVideoPresenter {
+  void getShortVideo(int start, int num) {}
 }

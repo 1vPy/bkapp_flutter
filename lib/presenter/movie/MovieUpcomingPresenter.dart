@@ -1,4 +1,3 @@
-
-abstract class MovieUpcomingPresenter {
-  void requestUpcomingMovie(int page);
+class MovieUpcomingPresenter {
+  void requestUpcomingMovie(int page) {}
 }

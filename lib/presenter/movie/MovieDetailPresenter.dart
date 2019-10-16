@@ -1,3 +1,3 @@
-abstract class MovieDetailPresenter {
-  void requestMovieDetail(int movieId);
+class MovieDetailPresenter {
+  void requestMovieDetail(int movieId){}
 }
