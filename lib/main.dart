@@ -1,3 +1,5 @@
+import 'package:bkapp_flutter/page/movie/SearchPage.dart';
+import 'package:bkapp_flutter/page/user/UserCenterPage.dart';
 import 'package:flutter/material.dart';
 import 'component/home/HomeDrawer.dart';
 import 'page/movie/MovieMainPage.dart';
@@ -42,7 +44,11 @@ class HomePageState extends State<HomePage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search, size: 30),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context)
+                  .push(
+                  MaterialPageRoute(builder: (context) => SearchPage()));
+            },
           ),
         ],
       ),
@@ -55,9 +61,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  void toSearchPage(){
-
-  }
+  void toSearchPage() {}
 }
 
 class MyApp extends StatelessWidget {

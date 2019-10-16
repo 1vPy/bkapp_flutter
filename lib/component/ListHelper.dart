@@ -12,13 +12,18 @@ class ListHelper {
       failedText: '刷新失败',
       textStyle: TextStyle(color: Colors.white),
       releaseText: '释放刷新',
+      releaseIcon: Icon(Icons.refresh, color: Colors.blue),
       idleText: '下拉刷新',
+      idleIcon: Icon(
+        Icons.arrow_downward,
+        color: Colors.blue,
+      ),
       refreshingIcon: SizedBox(
         width: 15,
         height: 15,
         child: CircularProgressIndicator(
           strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
         ),
       ),
     );
@@ -32,16 +37,24 @@ class ListHelper {
       noDataText: '没有更多了',
       noMoreIcon: Icon(
         Icons.all_inclusive,
-        color: Colors.white,
+        color: Colors.blue,
       ),
       idleText: '上拉加载',
-      idleIcon: Icon(Icons.arrow_upward),
+      idleIcon: Icon(
+        Icons.arrow_upward,
+        color: Colors.blue,
+      ),
+      failedIcon: Icon(
+        Icons.info,
+        color: Colors.red,
+      ),
+      failedText: '加载失败,点击重试',
       loadingIcon: SizedBox(
         width: 15,
         height: 15,
         child: CircularProgressIndicator(
           strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
         ),
       ),
     );
@@ -54,7 +67,7 @@ class ListHelper {
             width: 20,
             height: 20,
             child: CircularProgressIndicator(
-              strokeWidth: 1,
+              strokeWidth: 2,
             )),
         Container(
           child: Text(
@@ -67,7 +80,7 @@ class ListHelper {
   }
 
   static Widget createFail(Function _onRetry) {
-    return  Center(
+    return Center(
       child: GestureDetector(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -75,7 +88,7 @@ class ListHelper {
             Icon(Icons.error, color: Colors.red),
             Container(
               margin: EdgeInsets.only(left: 10),
-              child: Text('请求失败，点击重试'),
+              child: Text('请求失败,点击重试'),
             )
           ],
         ),

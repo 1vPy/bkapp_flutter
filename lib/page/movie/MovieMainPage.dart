@@ -32,7 +32,7 @@ class MovieMainPageState extends State<MovieMainPage>
 
   void onTabTap(int index) {
     _controller.animateToPage(index,
-        duration: Duration(milliseconds: 300), curve: Curves.linear);
+        duration: Duration(milliseconds: 200), curve: Curves.ease);
   }
 
   void onPageChange(index) {
@@ -45,11 +45,16 @@ class MovieMainPageState extends State<MovieMainPage>
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: const Color(0xFF303030),
         title: TabBar(
           tabs: getItems(),
           controller: _tabController,
           indicatorSize: TabBarIndicatorSize.label,
+          indicatorColor: Colors.blue,
+          indicatorWeight: 3,
+          labelColor: Colors.blue,
+          unselectedLabelColor: Colors.lightBlueAccent,
+          indicatorPadding: EdgeInsets.only(bottom: -3),
           onTap: (index) {
             onTabTap(index);
           },
