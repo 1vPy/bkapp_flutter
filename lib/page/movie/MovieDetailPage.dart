@@ -25,6 +25,9 @@ class MovieDetailPageState extends State<MovieDetailPage>
     implements MovieDetailView {
   MovieDetailPresenter _movieDetailPresenter;
   MovieDetail _movieDetail;
+  IconData _iconData = Icons.favorite_border;
+  bool _isCollected = false;
+  var _scaffoldkey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -39,9 +42,13 @@ class MovieDetailPageState extends State<MovieDetailPage>
         expandedHeight: 180.0,
         floating: false,
         pinned: true,
+        title: Text(
+          widget.item.title,
+          softWrap: true,
+          overflow: TextOverflow.ellipsis,
+        ),
         flexibleSpace: FlexibleSpaceBar(
             collapseMode: CollapseMode.pin,
-            title: Text(widget.item.title),
             background: FadeInImage.assetNetwork(
                 fadeInDuration: Duration(seconds: 2),
                 placeholder: 'images/movie_placeholder_image.png',
@@ -144,11 +151,28 @@ class MovieDetailPageState extends State<MovieDetailPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: NestedScrollView(
-            headerSliverBuilder: _sliverBuilder,
-            body: Column(
-              children: <Widget>[_createMovieDetailCard(), _createItems()],
-            )));
+      key: _scaffoldkey,
+      body: NestedScrollView(
+          headerSliverBuilder: _sliverBuilder,
+          body: Column(
+            children: <Widget>[_createMovieDetailCard(), _createItems()],
+          )),
+      floatingActionButton: FloatingActionButton(
+        onPressed: this.onCollectBtnClick,
+        child: Icon(_iconData),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    );
+  }
+
+  void onCollectBtnClick() {
+    setState(() {
+      _iconData = _isCollected ? Icons.favorite_border : Icons.favorite;
+      _isCollected = !_isCollected;
+    });
+    _scaffoldkey.currentState.removeCurrentSnackBar();
+    _scaffoldkey.currentState
+        .showSnackBar(SnackBar(content: Text(_isCollected ? '收藏成功' : '取消成功')));
   }
 
   @override

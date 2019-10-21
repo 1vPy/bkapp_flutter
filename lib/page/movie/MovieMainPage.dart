@@ -62,7 +62,7 @@ class MovieMainPageState extends State<MovieMainPage>
       ),
       body: PageView(
         physics: PageScrollPhysics(parent: BouncingScrollPhysics()),
-        children: <Widget>[MovieUpcomingPage(), MovieNowPlayingPage()],
+        children: <Widget>[MovieNowPlayingPage(), MovieUpcomingPage()],
         controller: _controller,
         onPageChanged: (index) {
           onPageChange(index);
