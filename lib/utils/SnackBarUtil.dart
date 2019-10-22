@@ -20,6 +20,7 @@ class SnackBarUtil {
 
   void showSnackBar(SnackBarStatus status, String tips,
       {bool needAction = false, String actionName, VoidCallback onPress}) {
+    _scaffoldState.removeCurrentSnackBar();
     if (needAction) {
       _scaffoldState.showSnackBar(new SnackBar(
         content: Row(children: <Widget>[

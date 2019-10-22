@@ -1,7 +1,8 @@
+import 'package:bkapp_flutter/component/home/HomeDrawer.dart';
 import 'package:bkapp_flutter/page/movie/SearchPage.dart';
 import 'package:bkapp_flutter/page/user/UserCenterPage.dart';
+import 'package:bkapp_flutter/utils/DBUtil.dart';
 import 'package:flutter/material.dart';
-import 'component/home/HomeDrawer.dart';
 import 'page/movie/MovieMainPage.dart';
 import 'page/shortvideo/ShortVideoPage.dart';
 
@@ -18,6 +19,12 @@ class HomePageState extends State<HomePage> {
 
   Widget _moviePage = MovieMainPage();
   Widget _shortVideoPage = ShortVideoPage();
+
+  @override
+  void initState() {
+    super.initState();
+    DBUtil().initDb();
+  }
 
   void _selected(id) {
     switch (id) {

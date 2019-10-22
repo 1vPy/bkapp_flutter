@@ -36,8 +36,8 @@ class HttpUtil {
 
   HttpUtil._internal() {
     _baseOptions = new BaseOptions(
-        connectTimeout: 15 * 1000,
-        receiveTimeout: 15 * 1000,
+        connectTimeout: 3 * 1000,
+        receiveTimeout: 3 * 1000,
         baseUrl: Constants.theMovieDBUrl);
     _dio = new Dio(_baseOptions);
     _dio.interceptors.add(LogInterceptor(
