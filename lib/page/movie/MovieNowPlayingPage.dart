@@ -161,7 +161,7 @@ class MovieNowPlayingPageState extends State<MovieNowPlayingPage>
 
   void _onLoading() {
     setState(() {
-      ++page;
+      page = ++page;
     });
     _movieNowPlayingPresenter.requestNowPlayingMovie(page);
   }
