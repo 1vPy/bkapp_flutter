@@ -4,6 +4,7 @@ import 'package:bkapp_flutter/component/movie/MovieListItem.dart';
 import 'package:bkapp_flutter/entity/enum/LoadingStatus.dart';
 import 'package:bkapp_flutter/entity/movie/MovieList.dart';
 import 'package:bkapp_flutter/entity/movie/results.dart';
+import 'package:bkapp_flutter/page/movie/MovieBasePage.dart';
 import 'package:bkapp_flutter/page/movie/MovieDetailPage.dart';
 import 'package:bkapp_flutter/presenter/movie/MovieNowPlayingPresenter.dart';
 import 'package:bkapp_flutter/presenter/movie/impl/MovieNowPlayingPresenterImpl.dart';
@@ -14,15 +15,23 @@ import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 //Created by 1vPy on 2019/10/16.
-class MovieNowPlayingPage extends StatefulWidget {
+class MovieNowPlayingPage extends MovieBasePage {
+  final MovieNowPlayingPageState state = MovieNowPlayingPageState();
+
   @override
-  State<StatefulWidget> createState() => MovieNowPlayingPageState();
+  State<StatefulWidget> createState() => state;
+
+  @override
+  void back2Top() {
+    state.back2Top();
+  }
 }
 
 class MovieNowPlayingPageState extends State<MovieNowPlayingPage>
     with AutomaticKeepAliveClientMixin
     implements MovieNowPlayingView {
   RefreshController _refreshController;
+  ScrollController _scrollController = ScrollController();
   List<Results> _items = [];
   MovieNowPlayingPresenter _movieNowPlayingPresenter;
   int page = 1;
@@ -51,6 +60,7 @@ class MovieNowPlayingPageState extends State<MovieNowPlayingPage>
         child: ListView.builder(
           itemBuilder: this._itemView,
           itemCount: _items.length,
+          controller: _scrollController,
         ),
         onRefresh: this._onRefresh,
         onLoading: this._onLoading,
@@ -75,6 +85,13 @@ class MovieNowPlayingPageState extends State<MovieNowPlayingPage>
   Widget build(BuildContext context) {
     super.build(context);
     return _createNowPlayingMovie();
+  }
+
+  void back2Top() {
+    if (status == LoadingStatus.Success) {
+      _scrollController.animateTo(0,
+          duration: Duration(milliseconds: 800), curve: Curves.decelerate);
+    }
   }
 
   void _onRefresh() {
