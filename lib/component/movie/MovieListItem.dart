@@ -2,6 +2,7 @@ import 'package:bkapp_flutter/Constants.dart';
 import 'package:bkapp_flutter/utils/GenresUtil.dart';
 import 'package:flutter/material.dart';
 import 'package:bkapp_flutter/entity/movie/results.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 //Created by 1vPy on 2019/10/21.
 
@@ -33,11 +34,20 @@ class MovieListItemState extends State<MovieListItem> {
                     child: Container(
                         child: ClipRRect(
                       borderRadius: BorderRadius.circular(2),
-                      child: FadeInImage.assetNetwork(
+                      child: CachedNetworkImage(
                         width: 80,
                         height: 120,
-                        placeholder: "images/movie_placeholder_image.png",
-                        image:
+                        placeholder: (context, url) {
+                          return ClipRRect(
+                            child: Image.asset(
+                              'images/movie_placeholder_image.png',
+                              width: 80,
+                              height: 120,
+                            ),
+                            borderRadius: BorderRadius.circular(2),
+                          );
+                        },
+                        imageUrl:
                             '${Constants.image_prefix}/w200/${widget.results.poster_path}',
                         fit: BoxFit.cover,
                       ),

@@ -7,6 +7,7 @@ import 'package:bkapp_flutter/utils/DBUtil.dart';
 import 'package:bkapp_flutter/utils/GenresUtil.dart';
 import 'package:bkapp_flutter/utils/SnackBarUtil.dart';
 import 'package:bkapp_flutter/view/movie/MovieDetailView.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/src/dio_error.dart';
 import 'package:flutter/material.dart';
 
@@ -64,10 +65,9 @@ class MovieDetailPageState extends State<MovieDetailPage>
         ),
         flexibleSpace: FlexibleSpaceBar(
             collapseMode: CollapseMode.pin,
-            background: FadeInImage.assetNetwork(
+            background: CachedNetworkImage(
                 fadeInDuration: Duration(seconds: 2),
-                placeholder: 'images/movie_placeholder_image.png',
-                image:
+                imageUrl:
                     '${Constants.image_prefix}w500/${widget.item.backdrop_path}',
                 fit: BoxFit.cover)),
       )
@@ -83,11 +83,20 @@ class MovieDetailPageState extends State<MovieDetailPage>
               child: Container(
                   child: ClipRRect(
                 borderRadius: BorderRadius.circular(2),
-                child: FadeInImage.assetNetwork(
+                child: CachedNetworkImage(
                   width: 80,
                   height: 120,
-                  placeholder: "images/movie_placeholder_image.png",
-                  image:
+                  placeholder: (context, url) {
+                    return ClipRRect(
+                      child: Image.asset(
+                        'images/movie_placeholder_image.png',
+                        width: 80,
+                        height: 120,
+                      ),
+                      borderRadius: BorderRadius.circular(2),
+                    );
+                  },
+                  imageUrl:
                       '${Constants.image_prefix}/w200/${widget.item.poster_path}',
                   fit: BoxFit.cover,
                 ),
@@ -215,11 +224,20 @@ class MovieDetailPageState extends State<MovieDetailPage>
             Container(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(3),
-                child: FadeInImage.assetNetwork(
+                child: CachedNetworkImage(
                   width: 80,
                   height: 110,
-                  placeholder: "images/movie_placeholder_image.png",
-                  image:
+                  placeholder: (context, url) {
+                    return ClipRRect(
+                      child: Image.asset(
+                        'images/movie_placeholder_image.png',
+                        width: 80,
+                        height: 110,
+                      ),
+                      borderRadius: BorderRadius.circular(2),
+                    );
+                  },
+                  imageUrl:
                       '${Constants.image_prefix}/w200/${isCast ? _movieDetail.credits.cast[index].profile_path : _movieDetail.credits.crew[index].profile_path}',
                   fit: BoxFit.cover,
                 ),
