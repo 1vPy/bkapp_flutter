@@ -127,8 +127,8 @@ class MovieNowPlayingPageState extends State<MovieNowPlayingPage>
           itemBuilder: this._itemView,
           itemCount: _items.length,
         ),
-        onLoading: this._onRefresh,
-        onRefresh: this._onLoading,
+        onRefresh: this._onRefresh,
+        onLoading: this._onLoading,
         controller: this._refreshController,
       ),
     );
@@ -153,25 +153,18 @@ class MovieNowPlayingPageState extends State<MovieNowPlayingPage>
   }
 
   void _onRefresh() {
-    setState(() {
-      page = 1;
-    });
-    _movieNowPlayingPresenter.requestNowPlayingMovie(page);
+    _movieNowPlayingPresenter.requestNowPlayingMovie(1);
   }
 
   void _onLoading() {
-    setState(() {
-      page = ++page;
-    });
-    _movieNowPlayingPresenter.requestNowPlayingMovie(page);
+    _movieNowPlayingPresenter.requestNowPlayingMovie(++page);
   }
 
   void _onRetry() {
     setState(() {
       status = LoadingStatus.Loading;
-      page = 1;
     });
-    _movieNowPlayingPresenter.requestNowPlayingMovie(page);
+    _movieNowPlayingPresenter.requestNowPlayingMovie(1);
   }
 
   void _toDetail(Results item) {
@@ -211,6 +204,7 @@ class MovieNowPlayingPageState extends State<MovieNowPlayingPage>
         _items = movieList.results;
       });
     }
+    page = movieList.page;
     if (movieList.page >= movieList.total_pages) {
       _refreshController.loadNoData();
     }

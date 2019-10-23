@@ -50,4 +50,20 @@ class Results {
 		data['release_date'] = release_date;
 		return data;
 	}
+
+	Map<String, dynamic> toSqlJson() {
+		final Map<String, dynamic> data = new Map<String, dynamic>();
+		data['vote_count'] = vote_count;
+		data['id'] = id;
+		data['vote_average'] = vote_average;
+		data['title'] = title;
+		data['popularity'] = popularity;
+		data['poster_path'] = poster_path;
+		data['original_language'] = original_language;
+		data['original_title'] = original_title;
+		data['genre_ids'] = genre_ids;
+		data['backdrop_path'] = backdrop_path;
+		data['release_date'] = release_date;
+		return data;
+	}
 }

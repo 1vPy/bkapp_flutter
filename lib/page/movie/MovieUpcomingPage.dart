@@ -6,13 +6,10 @@ import 'package:bkapp_flutter/entity/movie/results.dart';
 import 'package:bkapp_flutter/page/movie/MovieDetailPage.dart';
 import 'package:bkapp_flutter/presenter/movie/MovieUpcomingPresenter.dart';
 import 'package:bkapp_flutter/presenter/movie/impl/MovieUpcomingPresenterImpl.dart';
-import 'package:bkapp_flutter/utils/GenresUtil.dart';
 import 'package:bkapp_flutter/view/movie/MovieUpcomingView.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
-import '../../Constants.dart';
 
 //Created by 1vPy on 2019/10/16.
 class MovieUpcomingPage extends StatefulWidget {
@@ -46,81 +43,6 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
     return MovieListItem(_items[index], _toDetail, 'upComing');
   }
 
-//  Widget _itemView(BuildContext context, int index) {
-//    return Container(
-//        height: 120,
-//        child: GestureDetector(
-//          child: Card(
-//            child: Row(
-//              children: <Widget>[
-//                Hero(
-//                    tag: 'upComing${_items[index].id}',
-//                    child: Container(
-//                        child: ClipRRect(
-//                      borderRadius: BorderRadius.circular(2),
-//                      child: FadeInImage.assetNetwork(
-//                        width: 80,
-//                        height: 120,
-//                        placeholder: "images/movie_placeholder_image.png",
-//                        image:
-//                            '${Constants.image_prefix}/w200/${_items[index].poster_path}',
-//                        fit: BoxFit.cover,
-//                      ),
-//                    ))),
-//                Container(
-//                  margin: EdgeInsets.only(left: 5, top: 5),
-//                  child: Column(
-//                    crossAxisAlignment: CrossAxisAlignment.start,
-//                    children: <Widget>[
-//                      Text(
-//                        _items[index].title,
-//                        style: TextStyle(fontSize: 15),
-//                      ),
-//                      Text(
-//                        '原名：${_items[index].original_title}',
-//                        style: TextStyle(fontSize: 12),
-//                      ),
-//                      Text(
-//                        '类型：${GenresUtil.instance.id2Genres(_items[index].genre_ids)}',
-//                        style: TextStyle(fontSize: 12),
-//                      ),
-//                      Row(
-//                        crossAxisAlignment: CrossAxisAlignment.end,
-//                        children: <Widget>[
-//                          Text('评分：', style: TextStyle(fontSize: 12)),
-//                          Text(
-//                            _items[index].vote_average,
-//                            style: TextStyle(
-//                                fontSize: 12, color: Colors.redAccent),
-//                          ),
-//                          Container(
-//                              margin: EdgeInsets.only(left: 5),
-//                              child:
-//                                  Text('热度：', style: TextStyle(fontSize: 12))),
-//                          Text(
-//                            _items[index].popularity.toString(),
-//                            style: TextStyle(
-//                                fontSize: 12, color: Colors.amberAccent),
-//                          )
-//                        ],
-//                      ),
-//                      Text(
-//                        '首映：${_items[index].release_date}',
-//                        style: TextStyle(fontSize: 12),
-//                      )
-//                    ],
-//                  ),
-//                )
-//              ],
-//            ),
-//            margin: EdgeInsets.only(left: 10, right: 10, top: 10),
-//          ),
-//          onTap: () {
-//            _toDetail(_items[index]);
-//          },
-//        ));
-//  }
-
   Widget _createList() {
     return RefreshConfiguration(
       headerTriggerDistance: 35,
@@ -146,8 +68,8 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
       return status == LoadingStatus.Loading
           ? ListHelper.createLoading()
           : status == LoadingStatus.Success
-          ? Center(child: Text('暂无数据'))
-          : ListHelper.createFail(this._onRetry);
+              ? Center(child: Text('暂无数据'))
+              : ListHelper.createFail(this._onRetry);
     } else {
       return _createList();
     }
@@ -160,25 +82,18 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
   }
 
   void _onRefresh() {
-    setState(() {
-      page = 1;
-    });
-    _movieUpcomingPresenter.requestUpcomingMovie(page);
+    _movieUpcomingPresenter.requestUpcomingMovie(1);
   }
 
   void _onLoading() {
-    setState(() {
-      page = ++page;
-    });
-    _movieUpcomingPresenter.requestUpcomingMovie(page);
+    _movieUpcomingPresenter.requestUpcomingMovie(++page);
   }
 
   void _onRetry() {
     setState(() {
       status = LoadingStatus.Loading;
-      page = 1;
     });
-    _movieUpcomingPresenter.requestUpcomingMovie(page);
+    _movieUpcomingPresenter.requestUpcomingMovie(1);
   }
 
   void _toDetail(Results item) {
@@ -219,6 +134,7 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
         _items = movieList.results;
       });
     }
+    page = movieList.page;
     if (movieList.page >= movieList.total_pages) {
       _refreshController.loadNoData();
     }

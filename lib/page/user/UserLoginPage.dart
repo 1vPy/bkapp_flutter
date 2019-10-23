@@ -21,7 +21,7 @@ class UserLoginPageState extends State<UserLoginPage> implements UserLoginView {
   String _username;
   String _password;
   UserLoginPresenter _loginPresenter;
-  BuildContext _buildContext;
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -35,8 +35,8 @@ class UserLoginPageState extends State<UserLoginPage> implements UserLoginView {
 
   @override
   Widget build(BuildContext context) {
-    _buildContext = context;
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('用户登录'),
       ),
@@ -53,8 +53,10 @@ class UserLoginPageState extends State<UserLoginPage> implements UserLoginView {
                       size: 30,
                     ),
                     labelText: '用户名',
-                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue)),
-                    border: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue))),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue))),
                 onChanged: (value) {
                   _username = value;
                 },
@@ -68,8 +70,10 @@ class UserLoginPageState extends State<UserLoginPage> implements UserLoginView {
                         size: 30,
                       ),
                       labelText: '密码',
-                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue)),
-                      border: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue))),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue)),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue))),
                   obscureText: true,
                   onChanged: (value) {
                     _password = value;
@@ -94,14 +98,20 @@ class UserLoginPageState extends State<UserLoginPage> implements UserLoginView {
 
   @override
   void loginFail(DioError error) {
-//      SnackBarUtil.getInstance(_buildContext).showSnackBar(SnackBarStatus.fail, '登录失败: ${error.message}');
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text(
+        '登录失败:${error.message}',
+        style: TextStyle(color: Colors.white),
+      ),
+      backgroundColor: Colors.red,
+    ));
   }
 
   @override
   void loginSuccess(UserEntity userEntity) {
     StorageUtil.instance.saveUserInfo(userEntity);
     EventBus().fire(UserLoginStatusChangeEvent(LoginStatus.Login));
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => UserCenterPage()));
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => UserCenterPage()));
+//        .replace(this,MaterialPageRoute(builder: (context) => UserCenterPage()));
   }
 }

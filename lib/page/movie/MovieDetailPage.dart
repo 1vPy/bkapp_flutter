@@ -27,7 +27,6 @@ class MovieDetailPageState extends State<MovieDetailPage>
     implements MovieDetailView {
   MovieDetailPresenter _movieDetailPresenter;
   MovieDetail _movieDetail;
-  IconData _iconData = Icons.favorite_border;
   bool _isCollected = false;
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool _isLoading = false;
@@ -37,6 +36,12 @@ class MovieDetailPageState extends State<MovieDetailPage>
     super.initState();
     _movieDetailPresenter = MovieDetailPresenterImpl(this);
     this._requestMovieDetail();
+    DBUtil().getMovie(widget.item.id).then((value) {
+      print(value);
+      setState(() {
+        _isCollected = value != null;
+      });
+    });
   }
 
   void _requestMovieDetail() {
@@ -134,28 +139,170 @@ class MovieDetailPageState extends State<MovieDetailPage>
     );
   }
 
-  Widget _createItems() {
+  Widget _buildContainer() {
     if (_isLoading) {
-      return Container(
-        height: 250,
-        child: Row(children: <Widget>[
-          SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 1,
-              )),
-          Container(
-            child: Text(
-              '加载中..',
-            ),
-            margin: EdgeInsets.only(left: 10),
-          )
-        ], mainAxisAlignment: MainAxisAlignment.center),
-      );
+      return _buildLoading();
     } else {
-      return Column();
+      if (_movieDetail == null) {
+        return Container();
+      }
+      return _buildContent();
     }
+  }
+
+  Widget _buildLoading() {
+    return Container(
+      height: 250,
+      child: Row(children: <Widget>[
+        SizedBox(
+            width: 20,
+            height: 20,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+            )),
+        Container(
+          child: Text(
+            '加载中..',
+          ),
+          margin: EdgeInsets.only(left: 10),
+        )
+      ], mainAxisAlignment: MainAxisAlignment.center),
+    );
+  }
+
+  Widget _buildContent() {
+    return Column(
+      children: <Widget>[
+        _buildOverview(),
+        _buildCastItem(),
+      ],
+    );
+  }
+
+  Widget _buildOverview() {
+    return Card(
+      margin: EdgeInsets.all(10),
+      child: Column(
+        children: <Widget>[
+          Container(
+            alignment: Alignment.topLeft,
+            margin: EdgeInsets.only(left: 10, top: 10),
+            child: ClipRRect(
+              child: Container(
+                child: Text('简介'),
+                color: Colors.redAccent,
+                padding: EdgeInsets.all(3),
+              ),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(10),
+            child: Text(_movieDetail?.overview ?? ''),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildItem(context, index, isCast) {
+    return Card(
+      color: Colors.blueGrey,
+      child: Container(
+        width: 90,
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(3),
+                child: FadeInImage.assetNetwork(
+                  width: 80,
+                  height: 110,
+                  placeholder: "images/movie_placeholder_image.png",
+                  image:
+                      '${Constants.image_prefix}/w200/${isCast ? _movieDetail.credits.cast[index].profile_path : _movieDetail.credits.crew[index].profile_path}',
+                  fit: BoxFit.cover,
+                ),
+              ),
+              margin: EdgeInsets.all(5),
+            ),
+            Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(left: 5, right: 5),
+              child: Text(
+                isCast
+                    ? _movieDetail.credits.cast[index].name
+                    : _movieDetail.credits.crew[index].name,
+                maxLines: 1,
+                style: TextStyle(fontSize: 10, color: Colors.white),
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCastItem() {
+    return Card(
+      margin: EdgeInsets.all(10),
+      child: Column(
+        children: <Widget>[
+          Container(
+            alignment: Alignment.topLeft,
+            margin: EdgeInsets.only(left: 10, top: 10),
+            child: ClipRRect(
+              child: Container(
+                child: Text('演员表'),
+                color: Colors.redAccent,
+                padding: EdgeInsets.all(3),
+              ),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          Container(
+            height: 150,
+            margin: EdgeInsets.all(10),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return _buildItem(context, index, true);
+              },
+              itemCount: _movieDetail.credits.cast.length > 8
+                  ? 8
+                  : _movieDetail.credits.cast.length ?? 0,
+            ),
+          ),
+          Container(
+            alignment: Alignment.topLeft,
+            margin: EdgeInsets.only(left: 10, top: 10),
+            child: ClipRRect(
+              child: Container(
+                child: Text('职员表'),
+                color: Colors.redAccent,
+                padding: EdgeInsets.all(3),
+              ),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          Container(
+            height: 150,
+            margin: EdgeInsets.all(10),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return _buildItem(context, index, false);
+              },
+              itemCount: _movieDetail.credits.crew.length > 8
+                  ? 8
+                  : _movieDetail.credits.crew.length ?? 0,
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   @override
@@ -164,14 +311,17 @@ class MovieDetailPageState extends State<MovieDetailPage>
       key: _scaffoldKey,
       body: NestedScrollView(
           headerSliverBuilder: _sliverBuilder,
-          body: Column(
-            children: <Widget>[_createMovieDetailCard(), _createItems()],
+          body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[_createMovieDetailCard(), _buildContainer()],
+            ),
           )),
       floatingActionButton: _movieDetail == null
           ? null
           : FloatingActionButton(
               onPressed: this.onCollectBtnClick,
-              child: Icon(_iconData),
+              child:
+                  Icon(_isCollected ? Icons.favorite : Icons.favorite_border),
             ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
@@ -179,7 +329,6 @@ class MovieDetailPageState extends State<MovieDetailPage>
 
   void onCollectBtnClick() {
     setState(() {
-      _iconData = _isCollected ? Icons.favorite_border : Icons.favorite;
       _isCollected = !_isCollected;
     });
     if (_isCollected) {

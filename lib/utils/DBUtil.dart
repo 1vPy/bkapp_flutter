@@ -63,7 +63,7 @@ class DBUtil {
 
   Future<int> insertMovie(Results movie) async {
     var dbClient = await db;
-    var result = await dbClient.insert(tableMovie, movie.toJson());
+    var result = await dbClient.insert(tableMovie, movie.toSqlJson());
 
     return result;
   }
