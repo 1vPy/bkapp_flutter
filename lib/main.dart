@@ -24,6 +24,8 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  DateTime _lastPressedAt;
+
   var title = '电影';
   PageController _pageController = PageController(initialPage: 0);
 
@@ -81,14 +83,34 @@ class HomePageState extends State<HomePage> {
         ],
       ),
       drawer: Drawer(child: HomeDrawer(this._selected)),
-      body: PageView(
-        physics: NeverScrollableScrollPhysics(),
-        children: <Widget>[
-          _moviePage,
-          _shortVideoPage,
-        ],
-        controller: _pageController,
-      ),
+      body: Builder(builder: (context) {
+        return WillPopScope(
+            child: PageView(
+              physics: NeverScrollableScrollPhysics(),
+              children: <Widget>[
+                _moviePage,
+                _shortVideoPage,
+              ],
+              controller: _pageController,
+            ),
+            onWillPop: () async {
+              if (_lastPressedAt == null ||
+                  DateTime.now().difference(_lastPressedAt) >
+                      Duration(seconds: 1)) {
+                _lastPressedAt = DateTime.now();
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                    '再次点击退出程序',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  backgroundColor: Colors.red,
+                  duration: Duration(seconds: 1),
+                ));
+                return false; // 不退出
+              }
+              return true; //退出
+            });
+      }),
     );
   }
 
