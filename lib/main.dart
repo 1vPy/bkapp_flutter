@@ -28,7 +28,6 @@ class HomePageState extends State<HomePage> {
 
   Widget _moviePage = MovieMainPage();
   Widget _shortVideoPage = ShortVideoPage();
-  Widget _systemSettingPage = SystemSettingPage();
 
   @override
   void initState() {
@@ -37,25 +36,25 @@ class HomePageState extends State<HomePage> {
   }
 
   void _selected(id) {
+    Navigator.pop(context);
     switch (id) {
       case 0:
         setState(() {
           title = '电影';
         });
+        _pageController.jumpToPage(id);
         break;
       case 1:
         setState(() {
           title = '短视频';
         });
+        _pageController.jumpToPage(id);
         break;
       case 3:
-        setState(() {
-          title = '系统设置';
-        });
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => SystemSettingPage()));
         break;
     }
-    _pageController.jumpToPage(id);
-    Navigator.pop(context);
   }
 
   @override
@@ -64,23 +63,25 @@ class HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(title),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search, size: 30),
-            onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => SearchPage()));
-            },
-          ),
+          title == '电影' || title == '短视频'
+              ? IconButton(
+                  icon: Icon(Icons.search, size: 30),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => SystemSettingPage()));
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => SearchPage()));
+                  },
+                )
+              : Container(),
         ],
       ),
-      drawer: Drawer(child: HomeDrawer(_selected)),
+      drawer: Drawer(child: HomeDrawer(this._selected)),
       body: PageView(
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
           _moviePage,
           _shortVideoPage,
-          _systemSettingPage,
-          _systemSettingPage
         ],
         controller: _pageController,
       ),

@@ -19,30 +19,35 @@ class SystemSettingPageState extends BaseState<SystemSettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        ListTile(
-            title: Text(
-              '深色主题',
-            ),
-            trailing: Switch(
-                value: isDarkTheme,
-                onChanged: (value) {
-                  Constants.isDarkTheme = value;
-                  StorageUtil.instance.saveBool('isDarkTheme', value);
-                  setState(() {
-                    isDarkTheme = value;
-                  });
-                  EventBusUtil.instance.eventBus.fire(AppThemeChangeEvent());
-                })),
-        Container(
-          width: 200,
-          height: 1,
-          color: isDark
-              ? ThemeUtil.instance.darkTheme['separator']
-              : ThemeUtil.instance.lightTheme['separator'],
-        )
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('系统设置'),
+      ),
+      body: ListView(
+        children: <Widget>[
+          ListTile(
+              title: Text(
+                '深色主题',
+              ),
+              trailing: Switch(
+                  value: isDarkTheme,
+                  onChanged: (value) {
+                    Constants.isDarkTheme = value;
+                    StorageUtil.instance.saveBool('isDarkTheme', value);
+                    setState(() {
+                      isDarkTheme = value;
+                    });
+                    EventBusUtil.instance.eventBus.fire(AppThemeChangeEvent());
+                  })),
+          Container(
+            width: 200,
+            height: 1,
+            color: isDark
+                ? ThemeUtil.instance.darkTheme['separator']
+                : ThemeUtil.instance.lightTheme['separator'],
+          )
+        ],
+      ),
     );
   }
 }
