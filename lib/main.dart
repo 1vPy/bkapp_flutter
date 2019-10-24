@@ -96,7 +96,7 @@ class HomePageState extends State<HomePage> {
             onWillPop: () async {
               if (_lastPressedAt == null ||
                   DateTime.now().difference(_lastPressedAt) >
-                      Duration(seconds: 1)) {
+                      Duration(seconds: 2)) {
                 _lastPressedAt = DateTime.now();
                 Scaffold.of(context).showSnackBar(SnackBar(
                   content: Text(
@@ -104,7 +104,7 @@ class HomePageState extends State<HomePage> {
                     style: TextStyle(color: Colors.white),
                   ),
                   backgroundColor: Colors.red,
-                  duration: Duration(seconds: 1),
+                  duration: Duration(seconds: 2),
                 ));
                 return false; // 不退出
               }
