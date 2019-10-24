@@ -1,14 +1,14 @@
 import 'package:bkapp_flutter/entity/enum/LoginStatus.dart';
 import 'package:bkapp_flutter/entity/user/UserEntity.dart';
 import 'package:bkapp_flutter/event/UserLoginStatusChangeEvent.dart';
+import 'package:bkapp_flutter/page/BaseState.dart';
 import 'package:bkapp_flutter/page/user/UserCenterPage.dart';
 import 'package:bkapp_flutter/presenter/user/UserLoginPresente.dart';
 import 'package:bkapp_flutter/presenter/user/impl/UserLoginPresenterImpl.dart';
-import 'package:bkapp_flutter/utils/SnackBarUtil.dart';
+import 'package:bkapp_flutter/utils/EventBusUtil.dart';
 import 'package:bkapp_flutter/utils/StorageUtil.dart';
 import 'package:bkapp_flutter/view/user/UserLoginView.dart';
 import 'package:dio/src/dio_error.dart';
-import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
 
 //Created by 1vPy on 2019/10/16.
@@ -17,7 +17,7 @@ class UserLoginPage extends StatefulWidget {
   State<StatefulWidget> createState() => UserLoginPageState();
 }
 
-class UserLoginPageState extends State<UserLoginPage> implements UserLoginView {
+class UserLoginPageState extends BaseState<UserLoginPage> implements UserLoginView {
   String _username;
   String _password;
   UserLoginPresenter _loginPresenter;
@@ -27,6 +27,11 @@ class UserLoginPageState extends State<UserLoginPage> implements UserLoginView {
   void initState() {
     super.initState();
     _loginPresenter = new UserLoginPresenterImpl(this);
+  }
+
+  @override
+  void registerEvent() {
+
   }
 
   void onUserLogin() {
@@ -110,7 +115,7 @@ class UserLoginPageState extends State<UserLoginPage> implements UserLoginView {
   @override
   void loginSuccess(UserEntity userEntity) {
     StorageUtil.instance.saveUserInfo(userEntity);
-    EventBus().fire(UserLoginStatusChangeEvent(LoginStatus.Login));
+    EventBusUtil.instance.eventBus.fire(UserLoginStatusChangeEvent(LoginStatus.Login));
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => UserCenterPage()));
 //        .replace(this,MaterialPageRoute(builder: (context) => UserCenterPage()));
   }

@@ -1,4 +1,5 @@
 import 'package:bkapp_flutter/entity/movie/results.dart';
+import 'package:bkapp_flutter/page/BaseState.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -8,7 +9,7 @@ class SearchPage extends StatefulWidget {
   State<StatefulWidget> createState() => SearchPageState();
 }
 
-class SearchPageState extends State<SearchPage> {
+class SearchPageState extends BaseState<SearchPage> {
   FocusNode _contentFocusNode = FocusNode();
 
   List<Results> _searchItems = [];

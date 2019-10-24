@@ -1,11 +1,12 @@
 import 'package:bkapp_flutter/Constants.dart';
 import 'package:bkapp_flutter/entity/movie/detail/MovieDetail.dart';
 import 'package:bkapp_flutter/entity/movie/results.dart';
+import 'package:bkapp_flutter/page/BaseState.dart';
 import 'package:bkapp_flutter/presenter/movie/MovieDetailPresenter.dart';
 import 'package:bkapp_flutter/presenter/movie/impl/MovieDetailPresenterImpl.dart';
 import 'package:bkapp_flutter/utils/DBUtil.dart';
 import 'package:bkapp_flutter/utils/GenresUtil.dart';
-import 'package:bkapp_flutter/utils/SnackBarUtil.dart';
+import 'package:bkapp_flutter/utils/ThemeUtil.dart';
 import 'package:bkapp_flutter/view/movie/MovieDetailView.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/src/dio_error.dart';
@@ -24,7 +25,7 @@ class MovieDetailPage extends StatefulWidget {
   }
 }
 
-class MovieDetailPageState extends State<MovieDetailPage>
+class MovieDetailPageState extends BaseState<MovieDetailPage>
     implements MovieDetailView {
   MovieDetailPresenter _movieDetailPresenter;
   MovieDetail _movieDetail;
@@ -207,7 +208,7 @@ class MovieDetailPageState extends State<MovieDetailPage>
           ),
           Container(
             padding: EdgeInsets.all(10),
-            child: Text(_movieDetail?.overview ?? ''),
+            child: Text(_movieDetail.overview ?? '暂无介绍'),
           )
         ],
       ),
@@ -216,7 +217,9 @@ class MovieDetailPageState extends State<MovieDetailPage>
 
   Widget _buildItem(context, index, isCast) {
     return Card(
-      color: Colors.blueGrey,
+      color: isDark
+          ? ThemeUtil.instance.darkTheme['movieItemColor']
+          : ThemeUtil.instance.lightTheme['movieItemColor'],
       child: Container(
         width: 90,
         child: Column(
@@ -245,14 +248,27 @@ class MovieDetailPageState extends State<MovieDetailPage>
               margin: EdgeInsets.all(5),
             ),
             Container(
-              alignment: Alignment.center,
+              alignment: Alignment.centerLeft,
               padding: EdgeInsets.only(left: 5, right: 5),
               child: Text(
                 isCast
                     ? _movieDetail.credits.cast[index].name
                     : _movieDetail.credits.crew[index].name,
                 maxLines: 1,
-                style: TextStyle(fontSize: 10, color: Colors.white),
+                style: TextStyle(fontSize: 10),
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(left: 5, right: 5, top: 5),
+              child: Text(
+                isCast
+                    ? 'RP:${_movieDetail.credits.cast[index].character}'
+                    : 'JOB:${_movieDetail.credits.crew[index].job}',
+                maxLines: 1,
+                style: TextStyle(fontSize: 10),
                 softWrap: false,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -281,7 +297,7 @@ class MovieDetailPageState extends State<MovieDetailPage>
             ),
           ),
           Container(
-            height: 150,
+            height: 160,
             margin: EdgeInsets.all(10),
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -306,7 +322,7 @@ class MovieDetailPageState extends State<MovieDetailPage>
             ),
           ),
           Container(
-            height: 150,
+            height: 160,
             margin: EdgeInsets.all(10),
             child: ListView.builder(
               scrollDirection: Axis.horizontal,

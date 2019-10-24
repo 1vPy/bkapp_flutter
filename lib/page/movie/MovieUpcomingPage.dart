@@ -3,6 +3,7 @@ import 'package:bkapp_flutter/component/movie/MovieListItem.dart';
 import 'package:bkapp_flutter/entity/enum/LoadingStatus.dart';
 import 'package:bkapp_flutter/entity/movie/MovieList.dart';
 import 'package:bkapp_flutter/entity/movie/results.dart';
+import 'package:bkapp_flutter/page/BaseState.dart';
 import 'package:bkapp_flutter/page/movie/MovieBasePage.dart';
 import 'package:bkapp_flutter/page/movie/MovieDetailPage.dart';
 import 'package:bkapp_flutter/presenter/movie/MovieUpcomingPresenter.dart';
@@ -27,7 +28,7 @@ class MovieUpcomingPage extends MovieBasePage {
   }
 }
 
-class MovieUpcomingPageState extends State<MovieUpcomingPage>
+class MovieUpcomingPageState extends BaseState<MovieUpcomingPage>
     with AutomaticKeepAliveClientMixin
     implements MovieUpcomingView {
   RefreshController _refreshController;
@@ -90,7 +91,7 @@ class MovieUpcomingPageState extends State<MovieUpcomingPage>
   }
 
   void back2Top() {
-    if (status == LoadingStatus.Success) {
+    if (_items.length > 0) {
       _scrollController.animateTo(0,
           duration: Duration(milliseconds: 800), curve: Curves.decelerate);
     }

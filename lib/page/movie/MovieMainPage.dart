@@ -1,6 +1,8 @@
+import 'package:bkapp_flutter/page/BaseState.dart';
 import 'package:bkapp_flutter/page/movie/MovieBasePage.dart';
 import 'package:bkapp_flutter/page/movie/MovieNowPlayingPage.dart';
 import 'package:bkapp_flutter/page/movie/MovieUpcomingPage.dart';
+import 'package:bkapp_flutter/utils/ThemeUtil.dart';
 import 'package:flutter/material.dart';
 
 //Created by 1vPy on 2019/10/16.
@@ -9,14 +11,14 @@ class MovieMainPage extends StatefulWidget {
   State<StatefulWidget> createState() => MovieMainPageState();
 }
 
-class MovieMainPageState extends State<MovieMainPage>
+class MovieMainPageState extends BaseState<MovieMainPage>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   PageController _controller = PageController(initialPage: 0);
   TabController _tabController;
   List<MovieBasePage> pages = [MovieNowPlayingPage(), MovieUpcomingPage()];
 
-  MovieNowPlayingPage _movieNowPlayingPage = MovieNowPlayingPage();
-  MovieUpcomingPage _movieUpcomingPage = MovieUpcomingPage();
+//  MovieNowPlayingPage _movieNowPlayingPage = MovieNowPlayingPage();
+//  MovieUpcomingPage _movieUpcomingPage = MovieUpcomingPage();
 
   List<Tab> getItems() {
     List<Tab> list = new List();
@@ -53,7 +55,9 @@ class MovieMainPageState extends State<MovieMainPage>
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: const Color(0xFF303030),
+        backgroundColor: isDark
+            ? ThemeUtil.instance.darkTheme['tabColor']
+            : ThemeUtil.instance.lightTheme['tabColor'],
         title: TabBar(
           tabs: getItems(),
           controller: _tabController,
@@ -70,7 +74,7 @@ class MovieMainPageState extends State<MovieMainPage>
       ),
       body: PageView(
         physics: PageScrollPhysics(parent: BouncingScrollPhysics()),
-        children: <Widget>[_movieNowPlayingPage, _movieUpcomingPage],
+        children: pages,
         controller: _controller,
         onPageChanged: (index) {
           onPageChange(index);

@@ -1,14 +1,13 @@
-import 'package:bkapp_flutter/Constants.dart';
 import 'package:bkapp_flutter/component/ListHelper.dart';
 import 'package:bkapp_flutter/component/movie/MovieListItem.dart';
 import 'package:bkapp_flutter/entity/enum/LoadingStatus.dart';
 import 'package:bkapp_flutter/entity/movie/MovieList.dart';
 import 'package:bkapp_flutter/entity/movie/results.dart';
+import 'package:bkapp_flutter/page/BaseState.dart';
 import 'package:bkapp_flutter/page/movie/MovieBasePage.dart';
 import 'package:bkapp_flutter/page/movie/MovieDetailPage.dart';
 import 'package:bkapp_flutter/presenter/movie/MovieNowPlayingPresenter.dart';
 import 'package:bkapp_flutter/presenter/movie/impl/MovieNowPlayingPresenterImpl.dart';
-import 'package:bkapp_flutter/utils/GenresUtil.dart';
 import 'package:bkapp_flutter/view/movie/MovieNowPlayingView.dart';
 import 'package:dio/src/dio_error.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +26,7 @@ class MovieNowPlayingPage extends MovieBasePage {
   }
 }
 
-class MovieNowPlayingPageState extends State<MovieNowPlayingPage>
+class MovieNowPlayingPageState extends BaseState<MovieNowPlayingPage>
     with AutomaticKeepAliveClientMixin
     implements MovieNowPlayingView {
   RefreshController _refreshController;
@@ -88,7 +87,7 @@ class MovieNowPlayingPageState extends State<MovieNowPlayingPage>
   }
 
   void back2Top() {
-    if (status == LoadingStatus.Success) {
+    if (_items.length > 0) {
       _scrollController.animateTo(0,
           duration: Duration(milliseconds: 800), curve: Curves.decelerate);
     }

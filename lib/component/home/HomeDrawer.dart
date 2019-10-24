@@ -2,6 +2,7 @@ import 'package:bkapp_flutter/entity/user/UserEntity.dart';
 import 'package:bkapp_flutter/event/UserLoginStatusChangeEvent.dart';
 import 'package:bkapp_flutter/page/user/UserCenterPage.dart';
 import 'package:bkapp_flutter/page/user/UserLoginPage.dart';
+import 'package:bkapp_flutter/utils/EventBusUtil.dart';
 import 'package:bkapp_flutter/utils/StorageUtil.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +94,7 @@ class HeaderDrawerState extends State<HeaderDrawer> {
   }
 
   void registerEvent() {
-    EventBus().on<UserLoginStatusChangeEvent>().listen((event) {
+    EventBusUtil.instance.eventBus.on<UserLoginStatusChangeEvent>().listen((event) {
       getUserInfo();
     });
   }

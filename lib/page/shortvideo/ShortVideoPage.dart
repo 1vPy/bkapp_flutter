@@ -1,5 +1,6 @@
 import 'package:bkapp_flutter/entity/shortvideo/ShortVideoList.dart';
 import 'package:bkapp_flutter/entity/shortvideo/item_list.dart';
+import 'package:bkapp_flutter/page/BaseState.dart';
 import 'package:bkapp_flutter/presenter/shotvideo/ShortVideoPresenter.dart';
 import 'package:bkapp_flutter/presenter/shotvideo/impl/ShortVideoPresenterImpl.dart';
 import 'package:bkapp_flutter/view/shortvideo/ShortVideoView.dart';
@@ -13,7 +14,7 @@ class ShortVideoPage extends StatefulWidget {
   State<StatefulWidget> createState() => ShortVideoPageState();
 }
 
-class ShortVideoPageState extends State<ShortVideoPage>
+class ShortVideoPageState extends BaseState<ShortVideoPage>
     with ShortVideoView, AutomaticKeepAliveClientMixin {
   // VideoPlayerController _videoPlayerController = VideoPlayerController.network(
   //     'http://baobab.kaiyanapp.com/api/v1/playUrl?vid=104625&resourceType=video&editionType=default&source=aliyun');
