@@ -53,6 +53,7 @@ class MovieMainPageState extends BaseState<MovieMainPage>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: isDark

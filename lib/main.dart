@@ -1,6 +1,7 @@
 import 'package:bkapp_flutter/Constants.dart';
 import 'package:bkapp_flutter/component/home/HomeDrawer.dart';
 import 'package:bkapp_flutter/page/BaseState.dart';
+import 'package:bkapp_flutter/page/FeedbackPage.dart';
 import 'package:bkapp_flutter/page/movie/MovieMainPage.dart';
 import 'package:bkapp_flutter/page/movie/SearchPage.dart';
 import 'package:bkapp_flutter/page/setting/SystemSettingPage.dart';
@@ -54,12 +55,17 @@ class HomePageState extends State<HomePage> {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => SystemSettingPage()));
         break;
+      case 4:
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => FeedbackPage()));
+        break;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(title),
         actions: <Widget>[
@@ -67,8 +73,6 @@ class HomePageState extends State<HomePage> {
               ? IconButton(
                   icon: Icon(Icons.search, size: 30),
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SystemSettingPage()));
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => SearchPage()));
                   },
