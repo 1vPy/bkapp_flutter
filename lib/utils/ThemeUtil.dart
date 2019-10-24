@@ -15,5 +15,7 @@ class ThemeUtil {
     lightTheme['tabColor'] = Colors.white70;
     darkTheme['movieItemColor'] = Colors.blueGrey;
     lightTheme['movieItemColor'] = Colors.white70;
+    darkTheme['separator'] = Colors.white;
+    lightTheme['separator'] = Colors.grey;
   }
 }
