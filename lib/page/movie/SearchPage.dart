@@ -24,25 +24,24 @@ class SearchPageState extends BaseState<SearchPage> {
     return Scaffold(
       appBar: AppBar(
         title: Container(
-          margin: EdgeInsets.all(10),
+          margin: EdgeInsets.only(top: 10,bottom: 10),
           child: TextField(
             autofocus: true,
             focusNode: _contentFocusNode,
+            textInputAction: TextInputAction.search,
             textAlignVertical: TextAlignVertical.bottom,
             decoration: InputDecoration(
-                hintText: '请输入',
-                hintStyle: TextStyle(color: Colors.white),
-                focusedBorder: UnderlineInputBorder(),
-                suffixIcon: IconButton(
-                  alignment: Alignment.topRight,
-                  icon: Icon(
-                    Icons.search,
-                    color: Colors.white,
-                  ),
-                  onPressed: this.onSearchBtnClick,
-                )),
+                hintText: '请输入搜索',
+                hintStyle: TextStyle(color: Colors.white70),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white70)),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white70))),
             onChanged: (value) {
               _searchWord = value;
+            },
+            onSubmitted: (value) {
+              onSearchBtnClick();
             },
           ),
         ),
