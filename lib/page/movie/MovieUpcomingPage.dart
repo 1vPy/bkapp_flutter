@@ -122,7 +122,7 @@ class MovieUpcomingPageState extends BaseState<MovieUpcomingPage>
     if (_refreshController.isRefresh) {
       _refreshController.refreshFailed();
     } else if (_refreshController.isLoading) {
-      _refreshController.loadComplete();
+      _refreshController.loadFailed();
     } else {
       setState(() {
         status = LoadingStatus.Fail;
