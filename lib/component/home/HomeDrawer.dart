@@ -58,7 +58,7 @@ class ItemDrawer extends StatefulWidget {
       ItemDrawerState(id, title, icon, _onSelected);
 }
 
-class ItemDrawerState extends State<ItemDrawer> {
+class ItemDrawerState extends BaseState<ItemDrawer> {
   var id = 0;
   var title = '';
   var icon;
@@ -85,7 +85,7 @@ class HeaderDrawer extends StatefulWidget {
   State<StatefulWidget> createState() => HeaderDrawerState();
 }
 
-class HeaderDrawerState extends State<HeaderDrawer> {
+class HeaderDrawerState extends BaseState<HeaderDrawer> {
   UserEntity _userEntity;
 
   @override

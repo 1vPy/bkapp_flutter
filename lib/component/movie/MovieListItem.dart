@@ -1,4 +1,5 @@
 import 'package:bkapp_flutter/Constants.dart';
+import 'package:bkapp_flutter/page/BaseState.dart';
 import 'package:bkapp_flutter/utils/GenresUtil.dart';
 import 'package:flutter/material.dart';
 import 'package:bkapp_flutter/entity/movie/results.dart';
@@ -19,7 +20,7 @@ class MovieListItem extends StatefulWidget {
   State<StatefulWidget> createState() => MovieListItemState();
 }
 
-class MovieListItemState extends State<MovieListItem> {
+class MovieListItemState extends BaseState<MovieListItem> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

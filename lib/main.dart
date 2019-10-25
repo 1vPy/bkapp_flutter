@@ -23,7 +23,7 @@ class HomePage extends StatefulWidget {
   State<StatefulWidget> createState() => HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
+class HomePageState extends BaseState<HomePage> {
   DateTime _lastPressedAt;
 
   var title = '电影';
@@ -132,7 +132,7 @@ class MyAppState extends BaseState<MyApp> {
           primarySwatch: Colors.blue,
           primaryColor: Colors.blue,
           accentColor: Colors.blue,
-          canvasColor: Constants.isDarkTheme
+          canvasColor: isDark
               ? ThemeUtil.instance.darkTheme['canvasColor']
               : ThemeUtil.instance.lightTheme['canvasColor'],
           pageTransitionsTheme: PageTransitionsTheme(builders: {
