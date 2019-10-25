@@ -94,6 +94,9 @@ class HomePageState extends BaseState<HomePage> {
               controller: _pageController,
             ),
             onWillPop: () async {
+              if(Scaffold.of(context).isDrawerOpen){
+                return true;
+              }
               if (_lastPressedAt == null ||
                   DateTime.now().difference(_lastPressedAt) >
                       Duration(seconds: 2)) {
