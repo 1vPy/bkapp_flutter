@@ -19,18 +19,14 @@ class ShortVideoPage extends StatefulWidget {
 class ShortVideoPageState extends BaseState<ShortVideoPage>
     with ShortVideoView, AutomaticKeepAliveClientMixin {
   ShortVideoPresenter _shortVideoPresenter;
-  PageController _pageController;
   List<ItemList> _items = [];
   int _currentStart = 1;
-  double dy = 0;
-  double ITEM_HEIGHT;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
     _shortVideoPresenter = ShortVideoPresenterImpl(this);
-    _shortVideoPresenter.getShortVideo(_currentStart, 10);
+    this.onRefresh();
   }
 
   Widget buildItem(context, index) {
@@ -41,14 +37,12 @@ class ShortVideoPageState extends BaseState<ShortVideoPage>
   Widget build(BuildContext context) {
     super.build(context);
     return RefreshIndicator(
-      child: Container(
-        child: PageView.builder(
-          scrollDirection: Axis.vertical,
-          itemBuilder: this.buildItem,
-          itemCount: _items.length,
-          controller: _pageController,
-          onPageChanged: _onPageChange,
-        ),
+      backgroundColor: Colors.white,
+      child: PageView.builder(
+        scrollDirection: Axis.vertical,
+        itemBuilder: this.buildItem,
+        itemCount: _items.length,
+        onPageChanged: _onPageChange,
       ),
       onRefresh: this.onRefresh,
     );
@@ -65,9 +59,7 @@ class ShortVideoPageState extends BaseState<ShortVideoPage>
       Response<Map> response = await _shortVideoPresenter.getShortVideo(1, 10);
       _currentStart = 1;
       setState(() {
-        _items = ShortVideoList
-            .fromJsonMap(response.data)
-            .itemList;
+        _items = ShortVideoList.fromJsonMap(response.data).itemList;
       });
     } catch (e) {
       print('error = ${e.message}');
@@ -77,12 +69,10 @@ class ShortVideoPageState extends BaseState<ShortVideoPage>
   void onLoading() async {
     try {
       Response<Map> response =
-      await _shortVideoPresenter.getShortVideo(_currentStart + 10, 10);
+          await _shortVideoPresenter.getShortVideo(_currentStart + 10, 10);
       _currentStart = _currentStart + 10;
       var its = _items;
-      its.addAll(ShortVideoList
-          .fromJsonMap(response.data)
-          .itemList);
+      its.addAll(ShortVideoList.fromJsonMap(response.data).itemList);
       setState(() {
         _items = its;
       });
@@ -137,23 +127,23 @@ class ShortVideoItemState extends BaseState<ShortVideoItem> {
         children: <Widget>[
           _videoPlayerController.value.initialized
               ? Center(
-              child: AspectRatio(
-                aspectRatio: _videoPlayerController.value.aspectRatio,
-                child: VideoPlayer(_videoPlayerController),
-              ))
+                  child: AspectRatio(
+                  aspectRatio: _videoPlayerController.value.aspectRatio,
+                  child: VideoPlayer(_videoPlayerController),
+                ))
               : Center(
-            child: CachedNetworkImage(
-              imageUrl: widget._item.data.cover.feed,
-            ),
-          ),
+                  child: CachedNetworkImage(
+                    imageUrl: widget._item.data.cover.feed,
+                  ),
+                ),
           Center(
             child: isPlaying
                 ? null
                 : Icon(
-              Icons.play_circle_filled,
-              size: 80,
-              color: Colors.white70,
-            ),
+                    Icons.play_circle_filled,
+                    size: 80,
+                    color: Colors.white70,
+                  ),
           ),
           Container(
             alignment: Alignment.bottomRight,
@@ -234,46 +224,46 @@ class ShortVideoItemState extends BaseState<ShortVideoItem> {
               children: <Widget>[
                 Expanded(
                     child: Column(
-                      children: <Widget>[
-                        Expanded(
-                            child: Icon(
-                              Icons.cast,
-                              size: 30,
-                            )),
-                        Container(
-                          height: 20,
-                          child: Text('QQ'),
-                        )
-                      ],
+                  children: <Widget>[
+                    Expanded(
+                        child: Icon(
+                      Icons.cast,
+                      size: 30,
                     )),
+                    Container(
+                      height: 20,
+                      child: Text('QQ'),
+                    )
+                  ],
+                )),
                 Expanded(
                     child: Column(
-                      children: <Widget>[
-                        Expanded(
-                            child: Icon(
-                              Icons.alternate_email,
-                              size: 30,
-                            )),
-                        Container(
-                          height: 20,
-                          child: Text('微信'),
-                        )
-                      ],
+                  children: <Widget>[
+                    Expanded(
+                        child: Icon(
+                      Icons.alternate_email,
+                      size: 30,
                     )),
+                    Container(
+                      height: 20,
+                      child: Text('微信'),
+                    )
+                  ],
+                )),
                 Expanded(
                     child: Column(
-                      children: <Widget>[
-                        Expanded(
-                            child: Icon(
-                              Icons.devices_other,
-                              size: 30,
-                            )),
-                        Container(
-                          height: 20,
-                          child: Text('微博'),
-                        )
-                      ],
+                  children: <Widget>[
+                    Expanded(
+                        child: Icon(
+                      Icons.devices_other,
+                      size: 30,
                     )),
+                    Container(
+                      height: 20,
+                      child: Text('微博'),
+                    )
+                  ],
+                )),
               ],
             ),
           );
@@ -292,10 +282,7 @@ class ShortVideoItemState extends BaseState<ShortVideoItem> {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: isDark ? Color(0xFF303030) : Colors.white),
-            height: MediaQuery
-                .of(context)
-                .size
-                .height * 0.52,
+            height: MediaQuery.of(context).size.height * 0.52,
             child: Column(
               children: <Widget>[],
             ),
