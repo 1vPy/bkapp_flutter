@@ -49,11 +49,15 @@ class HttpUtil {
         error: true));
   }
 
-
   Observable<Response<T>> get<T>(String url,
       {Map<String, dynamic> param, Options options}) {
     return Observable.fromFuture(
         _dio.get(url, queryParameters: param, options: options));
+  }
+
+  Future<Response<T>> getFuture<T>(String url,
+      {Map<String, dynamic> param, Options options}) {
+    return _dio.get<T>(url, queryParameters: param, options: options);
   }
 
   Observable<Response<T>> post<T>(String url, {Map<String, dynamic> param}) {

@@ -10,6 +10,7 @@ import 'package:bkapp_flutter/utils/StorageUtil.dart';
 import 'package:bkapp_flutter/view/user/UserLoginView.dart';
 import 'package:dio/src/dio_error.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 //Created by 1vPy on 2019/10/16.
 class UserLoginPage extends StatefulWidget {
@@ -17,7 +18,8 @@ class UserLoginPage extends StatefulWidget {
   State<StatefulWidget> createState() => UserLoginPageState();
 }
 
-class UserLoginPageState extends BaseState<UserLoginPage> implements UserLoginView {
+class UserLoginPageState extends BaseState<UserLoginPage>
+    implements UserLoginView {
   String _username;
   String _password;
   UserLoginPresenter _loginPresenter;
@@ -30,9 +32,7 @@ class UserLoginPageState extends BaseState<UserLoginPage> implements UserLoginVi
   }
 
   @override
-  void registerEvent() {
-
-  }
+  void registerEvent() {}
 
   void onUserLogin() {
     _loginPresenter.login(_username, _password);
@@ -103,6 +103,7 @@ class UserLoginPageState extends BaseState<UserLoginPage> implements UserLoginVi
 
   @override
   void loginFail(DioError error) {
+    print(error);
     _scaffoldKey.currentState.showSnackBar(SnackBar(
       content: Text(
         '登录失败:${error.message}',
@@ -115,8 +116,10 @@ class UserLoginPageState extends BaseState<UserLoginPage> implements UserLoginVi
   @override
   void loginSuccess(UserEntity userEntity) {
     StorageUtil.instance.saveUserInfo(userEntity);
-    EventBusUtil.instance.eventBus.fire(UserLoginStatusChangeEvent(LoginStatus.Login));
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => UserCenterPage()));
-//        .replace(this,MaterialPageRoute(builder: (context) => UserCenterPage()));
+    EventBusUtil.instance.eventBus
+        .fire(UserLoginStatusChangeEvent(LoginStatus.Login));
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => UserCenterPage()));
+    Fluttertoast.showToast(msg: '登录成功',);
   }
 }

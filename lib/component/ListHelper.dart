@@ -6,7 +6,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class ListHelper {
   static Widget createHeader() {
     return ClassicHeader(
-      height: 35,
+      height: 40,
       refreshingText: '正在刷新',
       completeText: '刷新成功',
       failedText: '刷新失败',
@@ -17,6 +17,10 @@ class ListHelper {
       idleIcon: Icon(
         Icons.arrow_downward,
         color: Colors.blue,
+      ),
+      failedIcon: Icon(
+        Icons.info,
+        color: Colors.red,
       ),
       refreshingIcon: SizedBox(
         width: 15,
@@ -31,7 +35,7 @@ class ListHelper {
 
   static Widget createFooter() {
     return ClassicFooter(
-      height: 35,
+      height: 40,
       loadingText: '正在加载',
       textStyle: TextStyle(color: Colors.white),
       noDataText: '没有更多了',
@@ -82,18 +86,46 @@ class ListHelper {
   static Widget createFail(Function _onRetry) {
     return Center(
       child: GestureDetector(
-        child: Row(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Icon(Icons.error, color: Colors.red),
+            Icon(
+              Icons.network_check,
+              color: Colors.grey,
+              size: 80,
+            ),
             Container(
-              margin: EdgeInsets.only(left: 10),
-              child: Text('请求失败,点击重试'),
+              margin: EdgeInsets.only(top: 10),
+              child: MaterialButton(
+                color: Colors.blue,
+                child: Text('点击重试'),
+                onPressed: _onRetry,
+              ),
             )
           ],
         ),
         onTap: _onRetry,
       ),
     );
+  }
+
+  static Widget createEmpty() {
+    return Center(
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Icon(
+          Icons.remove_from_queue,
+          color: Colors.grey,
+          size: 80,
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 10),
+          child: Text('没有数据哦..!'),
+        )
+      ],
+    ));
   }
 }

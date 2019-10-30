@@ -1,4 +1,5 @@
 import 'package:bkapp_flutter/Constants.dart';
+import 'package:bkapp_flutter/component/ListHelper.dart';
 import 'package:bkapp_flutter/component/home/HomeDrawer.dart';
 import 'package:bkapp_flutter/page/BaseState.dart';
 import 'package:bkapp_flutter/page/FeedbackPage.dart';
@@ -10,6 +11,7 @@ import 'package:bkapp_flutter/utils/DBUtil.dart';
 import 'package:bkapp_flutter/utils/StorageUtil.dart';
 import 'package:bkapp_flutter/utils/ThemeUtil.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 void main() async {
   print(await StorageUtil.instance.getBool('isDarkTheme'));
@@ -94,7 +96,7 @@ class HomePageState extends BaseState<HomePage> {
               controller: _pageController,
             ),
             onWillPop: () async {
-              if(Scaffold.of(context).isDrawerOpen){
+              if (Scaffold.of(context).isDrawerOpen) {
                 return true;
               }
               if (_lastPressedAt == null ||
@@ -128,21 +130,28 @@ class MyApp extends StatefulWidget {
 class MyAppState extends BaseState<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-          brightness: isDark ? Brightness.dark : Brightness.light,
-          primarySwatch: Colors.blue,
-          primaryColor: Colors.blue,
-          accentColor: Colors.blue,
-          canvasColor: isDark
-              ? ThemeUtil.instance.darkTheme['canvasColor']
-              : ThemeUtil.instance.lightTheme['canvasColor'],
-          pageTransitionsTheme: PageTransitionsTheme(builders: {
-            TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
-            TargetPlatform.android: FadeUpwardsPageTransitionsBuilder()
-          })),
-      home: HomePage(),
-    );
+    return RefreshConfiguration(
+        hideFooterWhenNotFull: true,
+        maxOverScrollExtent: 0,
+        headerTriggerDistance: 35,
+        footerTriggerDistance: 35,
+        headerBuilder: ListHelper.createHeader,
+        footerBuilder: ListHelper.createFooter,
+        child: MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+              brightness: isDark ? Brightness.dark : Brightness.light,
+              primarySwatch: Colors.blue,
+              primaryColor: Colors.blue,
+              accentColor: Colors.blue,
+              canvasColor: isDark
+                  ? ThemeUtil.instance.darkTheme['canvasColor']
+                  : ThemeUtil.instance.lightTheme['canvasColor'],
+              pageTransitionsTheme: PageTransitionsTheme(builders: {
+                TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
+                TargetPlatform.android: FadeUpwardsPageTransitionsBuilder()
+              })),
+          home: HomePage(),
+        ));
   }
 }

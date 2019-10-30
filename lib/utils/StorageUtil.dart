@@ -33,6 +33,10 @@ class StorageUtil {
     return UserEntity.fromJsonMap(map);
   }
 
+  void clearUserInfo() async {
+    (await SharedPreferences.getInstance()).remove('userInfo');
+  }
+
   Future<bool> getBool(String key) async {
     return (await SharedPreferences.getInstance()).getBool(key);
   }

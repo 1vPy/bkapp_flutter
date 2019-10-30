@@ -35,16 +35,15 @@ class MovieUpcomingPageState extends BaseState<MovieUpcomingPage>
   ScrollController _scrollController = ScrollController();
   List<Results> _items = [];
   MovieUpcomingPresenter _movieUpcomingPresenter;
-  int page = 1;
+  int _page = 1;
 
-  LoadingStatus status = LoadingStatus.Loading;
+  LoadingStatus _status = LoadingStatus.Loading;
 
   @override
   void initState() {
     super.initState();
-    _refreshController = RefreshController();
+    _refreshController = RefreshController(initialRefresh: true);
     _movieUpcomingPresenter = MovieUpcomingPresenterImpl(this);
-    _movieUpcomingPresenter.requestUpcomingMovie(page);
   }
 
   Widget _itemView(BuildContext context, int index) {
@@ -52,36 +51,26 @@ class MovieUpcomingPageState extends BaseState<MovieUpcomingPage>
   }
 
   Widget _createList() {
-    return RefreshConfiguration(
-      headerTriggerDistance: 35,
-      hideFooterWhenNotFull: true,
-      maxOverScrollExtent: 35,
-      child: SmartRefresher(
-        header: ListHelper.createHeader(),
-        footer: ListHelper.createFooter(),
-        child: ListView.builder(
-          itemBuilder: _itemView,
-          itemCount: _items.length,
-          controller: _scrollController,
-        ),
-        controller: _refreshController,
-        enablePullUp: true,
-        onLoading: this._onLoading,
-        onRefresh: this._onRefresh,
+    return SmartRefresher(
+      header: MaterialClassicHeader(),
+      enablePullUp: true,
+      onLoading: this._onLoading,
+      onRefresh: this._onRefresh,
+      controller: _refreshController,
+      child: ListView.builder(
+        itemBuilder: _itemView,
+        itemCount: _items.length,
+        controller: _scrollController,
       ),
     );
   }
 
   Widget _createComingUpMovie() {
-    if (_items.length == 0) {
-      return status == LoadingStatus.Loading
-          ? ListHelper.createLoading()
-          : status == LoadingStatus.Success
-              ? Center(child: Text('暂无数据'))
-              : ListHelper.createFail(this._onRetry);
-    } else {
-      return _createList();
-    }
+    return _status == LoadingStatus.Fail
+        ? ListHelper.createFail(_onRetry)
+        : _status == LoadingStatus.Loading || _items.length > 0
+            ? _createList()
+            : ListHelper.createEmpty();
   }
 
   @override
@@ -102,14 +91,14 @@ class MovieUpcomingPageState extends BaseState<MovieUpcomingPage>
   }
 
   void _onLoading() {
-    _movieUpcomingPresenter.requestUpcomingMovie(++page);
+    _movieUpcomingPresenter.requestUpcomingMovie(++_page);
   }
 
   void _onRetry() {
     setState(() {
-      status = LoadingStatus.Loading;
+      _status = LoadingStatus.Loading;
     });
-    _movieUpcomingPresenter.requestUpcomingMovie(1);
+    _refreshController.requestRefresh();
   }
 
   void _toDetail(Results item) {
@@ -118,15 +107,23 @@ class MovieUpcomingPageState extends BaseState<MovieUpcomingPage>
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _refreshController.dispose();
+    _scrollController.dispose();
+  }
+
+  @override
   void requestMovieUpcomingFail(DioError error) {
     if (_refreshController.isRefresh) {
+      if (_items.length <= 0) {
+        setState(() {
+          _status = LoadingStatus.Fail;
+        });
+      }
       _refreshController.refreshFailed();
     } else if (_refreshController.isLoading) {
       _refreshController.loadFailed();
-    } else {
-      setState(() {
-        status = LoadingStatus.Fail;
-      });
     }
   }
 
@@ -134,6 +131,7 @@ class MovieUpcomingPageState extends BaseState<MovieUpcomingPage>
   void requestMovieUpcomingSuccess(MovieList movieList) {
     if (_refreshController.isRefresh) {
       setState(() {
+        _status = LoadingStatus.Success;
         _items = movieList.results;
       });
       _refreshController.refreshCompleted();
@@ -144,13 +142,8 @@ class MovieUpcomingPageState extends BaseState<MovieUpcomingPage>
         _items = its;
       });
       _refreshController.loadComplete();
-    } else {
-      setState(() {
-        status = LoadingStatus.Success;
-        _items = movieList.results;
-      });
     }
-    page = movieList.page;
+    _page = movieList.page;
     if (movieList.page >= movieList.total_pages) {
       _refreshController.loadNoData();
     }
