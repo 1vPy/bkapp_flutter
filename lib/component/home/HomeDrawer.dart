@@ -29,17 +29,18 @@ class HomeDrawerState extends BaseState<HomeDrawer> {
       children: <Widget>[
         HeaderDrawer(),
         ListTile(title: Text('分类')),
-        ItemDrawer(0, '电影', Icon(Icons.movie), _onSelected),
-        ItemDrawer(1, '短视频', Icon(Icons.music_video), _onSelected),
+        ItemDrawer(0, '电视', Icon(Icons.tv), _onSelected),
+        ItemDrawer(1, '电影', Icon(Icons.movie), _onSelected),
+        ItemDrawer(2, '短视频', Icon(Icons.music_video), _onSelected),
         Divider(
           color: Colors.grey,
           height: 1.0,
         ),
         ListTile(title: Text('选项')),
-        ItemDrawer(2, '我的收藏', Icon(Icons.collections_bookmark), _onSelected),
-        ItemDrawer(3, '系统设置', Icon(Icons.settings), _onSelected),
-        ItemDrawer(4, '问题反馈', Icon(Icons.message), _onSelected),
-        ItemDrawer(5, '关于', Icon(Icons.info), _onSelected),
+        ItemDrawer(3, '我的收藏', Icon(Icons.collections_bookmark), _onSelected),
+        ItemDrawer(4, '系统设置', Icon(Icons.settings), _onSelected),
+        ItemDrawer(5, '问题反馈', Icon(Icons.message), _onSelected),
+        ItemDrawer(6, '关于', Icon(Icons.info), _onSelected),
       ],
     );
   }

@@ -7,6 +7,8 @@ import 'package:bkapp_flutter/page/movie/MovieMainPage.dart';
 import 'package:bkapp_flutter/page/movie/SearchPage.dart';
 import 'package:bkapp_flutter/page/setting/SystemSettingPage.dart';
 import 'package:bkapp_flutter/page/shortvideo/ShortVideoPage.dart';
+import 'package:bkapp_flutter/page/tv/TvMainPage.dart';
+import 'package:bkapp_flutter/page/tv/TvRankPage.dart';
 import 'package:bkapp_flutter/utils/DBUtil.dart';
 import 'package:bkapp_flutter/utils/StorageUtil.dart';
 import 'package:bkapp_flutter/utils/ThemeUtil.dart';
@@ -14,9 +16,9 @@ import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 void main() async {
-  print(await StorageUtil.instance.getBool('isDarkTheme'));
-  Constants.isDarkTheme =
-      await StorageUtil.instance.getBool('isDarkTheme') ?? true;
+//  print(await StorageUtil.instance.getBool('isDarkTheme'));
+//  Constants.isDarkTheme =
+//      await StorageUtil.instance.getBool('isDarkTheme') ?? true;
   return runApp(MyApp());
 }
 
@@ -28,9 +30,10 @@ class HomePage extends StatefulWidget {
 class HomePageState extends BaseState<HomePage> {
   DateTime _lastPressedAt;
 
-  var title = '电影';
+  var title = '电视';
   PageController _pageController = PageController(initialPage: 0);
 
+  Widget _tvPage = TvMainPage();
   Widget _moviePage = MovieMainPage();
   Widget _shortVideoPage = ShortVideoPage();
 
@@ -45,21 +48,27 @@ class HomePageState extends BaseState<HomePage> {
     switch (id) {
       case 0:
         setState(() {
-          title = '电影';
+          title = '电视';
         });
         _pageController.jumpToPage(id);
         break;
       case 1:
         setState(() {
+          title = '电影';
+        });
+        _pageController.jumpToPage(id);
+        break;
+      case 2:
+        setState(() {
           title = '短视频';
         });
         _pageController.jumpToPage(id);
         break;
-      case 3:
+      case 4:
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => SystemSettingPage()));
         break;
-      case 4:
+      case 5:
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => FeedbackPage()));
         break;
@@ -73,7 +82,7 @@ class HomePageState extends BaseState<HomePage> {
       appBar: AppBar(
         title: Text(title),
         actions: <Widget>[
-          title == '电影' || title == '短视频'
+          title == '电影' || title == '短视频' || title == '电视'
               ? IconButton(
                   icon: Icon(Icons.search, size: 30),
                   onPressed: () {
@@ -90,6 +99,7 @@ class HomePageState extends BaseState<HomePage> {
             child: PageView(
               physics: NeverScrollableScrollPhysics(),
               children: <Widget>[
+                _tvPage,
                 _moviePage,
                 _shortVideoPage,
               ],

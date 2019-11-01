@@ -6,7 +6,7 @@ class Results {
   bool video;
   String vote_average;
   String title;
-  double popularity;
+	String popularity;
   String poster_path;
   String original_language;
   String original_title;
@@ -22,7 +22,7 @@ class Results {
 		video = map["video"],
 		vote_average = map["vote_average"].toString(),
 		title = map["title"],
-		popularity = map["popularity"],
+		popularity = map["popularity"].toString(),
 		poster_path = map["poster_path"],
 		original_language = map["original_language"],
 		original_title = map["original_title"],

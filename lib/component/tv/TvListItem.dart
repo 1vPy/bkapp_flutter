@@ -1,26 +1,26 @@
 import 'package:bkapp_flutter/Constants.dart';
+import 'package:bkapp_flutter/entity/tv/results.dart';
 import 'package:bkapp_flutter/page/BaseState.dart';
 import 'package:bkapp_flutter/utils/GenresUtil.dart';
 import 'package:flutter/material.dart';
-import 'package:bkapp_flutter/entity/movie/results.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 //Created by 1vPy on 2019/10/21.
 
-class MovieListItem extends StatefulWidget {
+class TvListItem extends StatefulWidget {
   final Results results;
 
   final Function toDetail;
 
   final String tag;
 
-  MovieListItem(this.results, this.toDetail, this.tag);
+  TvListItem(this.results, this.toDetail, this.tag);
 
   @override
-  State<StatefulWidget> createState() => MovieListItemState();
+  State<StatefulWidget> createState() => TvListItemState();
 }
 
-class MovieListItemState extends BaseState<MovieListItem> {
+class TvListItemState extends BaseState<TvListItem> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -59,11 +59,11 @@ class MovieListItemState extends BaseState<MovieListItem> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        widget.results.title,
+                        widget.results.name,
                         style: TextStyle(fontSize: 15),
                       ),
                       Text(
-                        '原名：${widget.results.original_title}',
+                        '原名：${widget.results.original_name}',
                         style: TextStyle(fontSize: 12),
                       ),
                       Text(
@@ -91,7 +91,7 @@ class MovieListItemState extends BaseState<MovieListItem> {
                         ],
                       ),
                       Text(
-                        '首映：${widget.results.release_date}',
+                        '首播：${widget.results.first_air_date}',
                         style: TextStyle(fontSize: 12),
                       )
                     ],

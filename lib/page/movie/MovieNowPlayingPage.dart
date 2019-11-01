@@ -103,6 +103,7 @@ class MovieNowPlayingPageState extends BaseState<MovieNowPlayingPage>
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => MovieDetailPage(item, 'nowPlaying${item.id}')));
   }
+
   @override
   void dispose() {
     super.dispose();

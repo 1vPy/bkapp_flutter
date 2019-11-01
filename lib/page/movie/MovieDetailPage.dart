@@ -131,7 +131,7 @@ class MovieDetailPageState extends BaseState<MovieDetailPage>
                         margin: EdgeInsets.only(left: 5),
                         child: Text('热度：', style: TextStyle(fontSize: 12))),
                     Text(
-                      widget.item.popularity.toString(),
+                      widget.item.popularity,
                       style: TextStyle(fontSize: 12, color: Colors.amberAccent),
                     )
                   ],
