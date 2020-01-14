@@ -1,6 +1,7 @@
 import 'package:bkapp_flutter/constants.dart';
 import 'package:bkapp_flutter/component/list_helper.dart';
 import 'package:bkapp_flutter/component/home/home_drawer.dart';
+import 'package:bkapp_flutter/event/app_theme_change_event.dart';
 import 'package:bkapp_flutter/page/base_state.dart';
 import 'package:bkapp_flutter/page/feedback_page.dart';
 import 'package:bkapp_flutter/page/movie/movie_main_page.dart';
@@ -10,6 +11,7 @@ import 'package:bkapp_flutter/page/shortvideo/short_video_page.dart';
 import 'package:bkapp_flutter/page/tv/tv_main_page.dart';
 import 'package:bkapp_flutter/page/tv/tv_rank_page.dart';
 import 'package:bkapp_flutter/utils/db_util.dart';
+import 'package:bkapp_flutter/utils/event_bus_util.dart';
 import 'package:bkapp_flutter/utils/storage_util.dart';
 import 'package:bkapp_flutter/utils/theme_util.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +43,14 @@ class HomePageState extends BaseState<HomePage> {
   void initState() {
     super.initState();
     DBUtil().initDb();
+    setMode();
+  }
+
+  void setMode() async {
+    print(await StorageUtil.instance.getBool('isDarkTheme'));
+      Constants.isDarkTheme =
+          await StorageUtil.instance.getBool('isDarkTheme') ?? true;
+      EventBusUtil.instance.eventBus.fire(AppThemeChangeEvent());
   }
 
   void _selected(id) {
@@ -82,7 +92,7 @@ class HomePageState extends BaseState<HomePage> {
       appBar: AppBar(
         title: Text(title),
         actions: <Widget>[
-          title == '电影' || title == '短视频' || title == '电视'
+          title == '电影' || title == '电视'
               ? IconButton(
                   icon: Icon(Icons.search, size: 30),
                   onPressed: () {
