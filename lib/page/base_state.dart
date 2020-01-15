@@ -5,7 +5,7 @@ import 'package:bkapp_flutter/utils/event_bus_util.dart';
 import 'package:flutter/material.dart';
 
 abstract class BaseState<T extends StatefulWidget> extends State<T> {
-  bool isDark = Constants.isDarkTheme;
+  int isDark = Constants.isDarkTheme;
 
   @override
   void initState() {

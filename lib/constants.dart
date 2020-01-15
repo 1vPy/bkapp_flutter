@@ -7,5 +7,13 @@ class Constants {
   static const BmobApiUrl = 'https://api.bmob.cn/';
   static const BmobAppId = 'c6dbd18c94e5d67f3047f196165df693';
   static const BmobRestKey = '0c0633c21b454ebbb447e8cc3065ee33';
-  static bool isDarkTheme = true;
+  static int isDarkTheme = 0;
+
+  static const themeMode = {
+    ThemeType.FOLLOW_SYSTEM: 0,
+    ThemeType.DARK: 1,
+    ThemeType.LIGHT: 2
+  };
 }
+
+enum ThemeType { FOLLOW_SYSTEM, DARK, LIGHT }

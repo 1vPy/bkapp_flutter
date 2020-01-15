@@ -157,7 +157,7 @@ class ShortVideoItemState extends BaseState<ShortVideoItem> {
                       icon: Icon(
                         Icons.share,
                         size: 30,
-                        color: isDark ? Colors.white70 : Colors.grey,
+//                        color: isDark ? Colors.white70 : Colors.grey,
                       ),
                       onPressed: this.showSharePanel),
                 ),
@@ -167,7 +167,7 @@ class ShortVideoItemState extends BaseState<ShortVideoItem> {
                       icon: Icon(
                         Icons.insert_comment,
                         size: 30,
-                        color: isDark ? Colors.white70 : Colors.grey,
+//                        color: isDark ? Colors.white70 : Colors.grey,
                       ),
                       onPressed: this.showCommentPanel),
                 ),
@@ -177,9 +177,7 @@ class ShortVideoItemState extends BaseState<ShortVideoItem> {
                       icon: Icon(
                         Icons.favorite,
                         size: 30,
-                        color: isFavorite
-                            ? Colors.red
-                            : isDark ? Colors.white70 : Colors.grey,
+                        color: isFavorite ? Colors.red : Colors.white70,
                       ),
                       onPressed: this.setFavorite),
                 ),
@@ -218,7 +216,7 @@ class ShortVideoItemState extends BaseState<ShortVideoItem> {
             margin: EdgeInsets.only(left: 2, right: 2, bottom: 5),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: isDark ? Color(0xFF303030) : Colors.white),
+                /*color: isDark ? Color(0xFF303030) : Colors.white*/),
             height: 70,
             child: Row(
               children: <Widget>[
@@ -281,7 +279,7 @@ class ShortVideoItemState extends BaseState<ShortVideoItem> {
             margin: EdgeInsets.only(left: 2, right: 2, bottom: 5),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: isDark ? Color(0xFF303030) : Colors.white),
+                /*color: isDark ? Color(0xFF303030) : Colors.white*/),
             height: MediaQuery.of(context).size.height * 0.52,
             child: Column(
               children: <Widget>[],

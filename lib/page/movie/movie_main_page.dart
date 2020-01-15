@@ -56,17 +56,15 @@ class MovieMainPageState extends BaseState<MovieMainPage>
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: isDark
+/*        backgroundColor: isDark
             ? ThemeUtil.instance.darkTheme['tabColor']
-            : ThemeUtil.instance.lightTheme['tabColor'],
+            : ThemeUtil.instance.lightTheme['tabColor'],*/
         title: TabBar(
           tabs: getItems(),
           controller: _tabController,
           indicatorSize: TabBarIndicatorSize.label,
           indicatorColor: Colors.blue,
           indicatorWeight: 3,
-          labelColor: Colors.blue,
-          unselectedLabelColor: Colors.lightBlueAccent,
           indicatorPadding: EdgeInsets.only(bottom: -3),
           onTap: (index) {
             onTabTap(index);

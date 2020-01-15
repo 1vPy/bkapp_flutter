@@ -217,9 +217,9 @@ class MovieDetailPageState extends BaseState<MovieDetailPage>
 
   Widget _buildItem(context, index, isCast) {
     return Card(
-      color: isDark
+/*      color: isDark
           ? ThemeUtil.instance.darkTheme['movieItemColor']
-          : ThemeUtil.instance.lightTheme['movieItemColor'],
+          : ThemeUtil.instance.lightTheme['movieItemColor'],*/
       child: Container(
         width: 90,
         child: Column(
@@ -354,8 +354,8 @@ class MovieDetailPageState extends BaseState<MovieDetailPage>
           ? null
           : FloatingActionButton(
               onPressed: this.onCollectBtnClick,
-              child:
-                  Icon(_isCollected ? Icons.favorite : Icons.favorite_border),
+              child: Icon(_isCollected ? Icons.favorite : Icons.favorite_border,
+                  color: Colors.white),
             ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );

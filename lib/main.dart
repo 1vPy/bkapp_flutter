@@ -1,4 +1,5 @@
 import 'package:bkapp_flutter/constants.dart';
+import 'package:bkapp_flutter/constants.dart';
 import 'package:bkapp_flutter/component/list_helper.dart';
 import 'package:bkapp_flutter/component/home/home_drawer.dart';
 import 'package:bkapp_flutter/event/app_theme_change_event.dart';
@@ -9,11 +10,9 @@ import 'package:bkapp_flutter/page/movie/search_page.dart';
 import 'package:bkapp_flutter/page/setting/system_setting_page.dart';
 import 'package:bkapp_flutter/page/shortvideo/short_video_page.dart';
 import 'package:bkapp_flutter/page/tv/tv_main_page.dart';
-import 'package:bkapp_flutter/page/tv/tv_rank_page.dart';
 import 'package:bkapp_flutter/utils/db_util.dart';
 import 'package:bkapp_flutter/utils/event_bus_util.dart';
 import 'package:bkapp_flutter/utils/storage_util.dart';
-import 'package:bkapp_flutter/utils/theme_util.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -47,10 +46,10 @@ class HomePageState extends BaseState<HomePage> {
   }
 
   void setMode() async {
-    print(await StorageUtil.instance.getBool('isDarkTheme'));
-      Constants.isDarkTheme =
-          await StorageUtil.instance.getBool('isDarkTheme') ?? true;
-      EventBusUtil.instance.eventBus.fire(AppThemeChangeEvent());
+    print(await StorageUtil.instance.getInt('isDarkTheme'));
+    Constants.isDarkTheme = await StorageUtil.instance.getInt('isDarkTheme') ??
+        Constants.themeMode[ThemeType.FOLLOW_SYSTEM];
+    EventBusUtil.instance.eventBus.fire(AppThemeChangeEvent());
   }
 
   void _selected(id) {
@@ -157,9 +156,12 @@ class MyAppState extends BaseState<MyApp> {
         footerTriggerDistance: 35,
         headerBuilder: ListHelper.createHeader,
         footerBuilder: ListHelper.createFooter,
-        child: MaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData(
+        child: isDark == Constants.themeMode[ThemeType.FOLLOW_SYSTEM]
+            ? MaterialApp(
+                title: 'Flutter Demo',
+                darkTheme: ThemeData.dark(),
+                theme: ThemeData
+                    .light() /*ThemeData(
               brightness: isDark ? Brightness.dark : Brightness.light,
               primarySwatch: Colors.blue,
               primaryColor: Colors.blue,
@@ -170,8 +172,29 @@ class MyAppState extends BaseState<MyApp> {
               pageTransitionsTheme: PageTransitionsTheme(builders: {
                 TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
                 TargetPlatform.android: FadeUpwardsPageTransitionsBuilder()
-              })),
-          home: HomePage(),
-        ));
+              }))*/
+                ,
+                home: HomePage(),
+              )
+            : MaterialApp(
+                title: 'Flutter Demo',
+                theme: isDark == Constants.themeMode[ThemeType.DARK]
+                    ? ThemeData.dark()
+                    : ThemeData
+                        .light() /*ThemeData(
+              brightness: isDark ? Brightness.dark : Brightness.light,
+              primarySwatch: Colors.blue,
+              primaryColor: Colors.blue,
+              accentColor: Colors.blue,
+              canvasColor: isDark
+                  ? ThemeUtil.instance.darkTheme['canvasColor']
+                  : ThemeUtil.instance.lightTheme['canvasColor'],
+              pageTransitionsTheme: PageTransitionsTheme(builders: {
+                TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
+                TargetPlatform.android: FadeUpwardsPageTransitionsBuilder()
+              }))*/
+                ,
+                home: HomePage(),
+              ));
   }
 }
