@@ -33,7 +33,8 @@ class HomeDrawerState extends BaseState<HomeDrawer> {
           height: 1.0,
         ),
         ListTile(title: Text('选项')),
-        ItemDrawer(3, '我的收藏', Icon(Icons.collections_bookmark), widget._onSelected),
+        ItemDrawer(
+            3, '我的收藏', Icon(Icons.collections_bookmark), widget._onSelected),
         ItemDrawer(4, '系统设置', Icon(Icons.settings), widget._onSelected),
         ItemDrawer(5, '问题反馈', Icon(Icons.message), widget._onSelected),
         ItemDrawer(6, '关于', Icon(Icons.info), widget._onSelected),
@@ -51,8 +52,7 @@ class ItemDrawer extends StatefulWidget {
   ItemDrawer(this.id, this.title, this.icon, this._onSelected) : super();
 
   @override
-  State<StatefulWidget> createState() =>
-      ItemDrawerState();
+  State<StatefulWidget> createState() => ItemDrawerState();
 }
 
 class ItemDrawerState extends BaseState<ItemDrawer> {
@@ -125,15 +125,18 @@ class HeaderDrawerState extends BaseState<HeaderDrawer> {
                   child: FittedBox(
                       alignment: AlignmentDirectional.center,
                       child: GestureDetector(
-                        child: CircleAvatar(
-                            child: _userEntity?.userHeader?.url?.isEmpty ?? true
-                                ? Icon(
-                                    Icons.account_circle,
-                                    size: 40,
-                                  )
-                                : Image.network(
-                                    _userEntity?.userHeader?.url ?? '',
-                                  )),
+                        child: Hero(
+                            tag: 'userAvatar',
+                            child: CircleAvatar(
+                                child: _userEntity?.userHeader?.url?.isEmpty ??
+                                        true
+                                    ? Icon(
+                                        Icons.account_circle,
+                                        size: 40,
+                                      )
+                                    : Image.network(
+                                        _userEntity?.userHeader?.url ?? '',
+                                      ))),
                         onTap: this.toUserCenter,
                       )),
                   flex: 2,

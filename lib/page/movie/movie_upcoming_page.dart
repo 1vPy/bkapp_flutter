@@ -109,7 +109,7 @@ class MovieUpcomingPageState extends BaseState<MovieUpcomingPage>
               begin: Offset(1.0, 0.0),
               end: Offset(0.0, 0.0)
           ).animate(CurvedAnimation(parent: animation, curve: Curves.decelerate)),
-           child: MovieDetailPage(item, 'nowPlaying${item.id}'));
+           child: MovieDetailPage(item, 'upComing${item.id}'));
     }));
 
 //    Navigator.of(context).push(MaterialPageRoute(

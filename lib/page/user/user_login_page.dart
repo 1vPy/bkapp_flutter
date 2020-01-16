@@ -45,13 +45,25 @@ class UserLoginPageState extends BaseState<UserLoginPage>
       appBar: AppBar(
         title: Text('用户登录'),
       ),
-      body: Form(
-        child: Container(
-          margin: EdgeInsets.only(left: 20, right: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              TextField(
+      body: Container(
+        margin: EdgeInsets.only(left: 20, right: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            FittedBox(
+                child: Hero(
+              tag: 'userAvatar',
+              child: CircleAvatar(
+                child: Icon(
+                  Icons.account_circle,
+                  size: 120,
+                ),
+                radius: 60.0,
+              ),
+            )),
+            Container(
+              margin: EdgeInsets.only(top: 20),
+              child: TextField(
                 decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.account_circle,
@@ -66,36 +78,36 @@ class UserLoginPageState extends BaseState<UserLoginPage>
                   _username = value;
                 },
               ),
-              Container(
-                margin: EdgeInsets.only(top: 10),
-                child: TextField(
-                  decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.lock,
-                        size: 30,
-                      ),
-                      labelText: '密码',
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue)),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue))),
-                  obscureText: true,
-                  onChanged: (value) {
-                    _password = value;
-                  },
-                ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              child: TextField(
+                decoration: InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.lock,
+                      size: 30,
+                    ),
+                    labelText: '密码',
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue))),
+                obscureText: true,
+                onChanged: (value) {
+                  _password = value;
+                },
               ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                margin: EdgeInsets.only(top: 40),
-                height: 40,
-                child: RaisedButton(
-                  child: Text('登录'),
-                  onPressed: this.onUserLogin,
-                ),
-              )
-            ],
-          ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.only(top: 40),
+              height: 40,
+              child: RaisedButton(
+                child: Text('登录'),
+                onPressed: this.onUserLogin,
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -120,6 +132,8 @@ class UserLoginPageState extends BaseState<UserLoginPage>
         .fire(UserLoginStatusChangeEvent(LoginStatus.Login));
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => UserCenterPage()));
-    Fluttertoast.showToast(msg: '登录成功',);
+    Fluttertoast.showToast(
+      msg: '登录成功',
+    );
   }
 }
