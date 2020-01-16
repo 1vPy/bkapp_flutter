@@ -80,28 +80,33 @@ class MovieDetailPageState extends BaseState<MovieDetailPage>
       child: Row(
         children: <Widget>[
           Hero(
-              tag: widget.tag,
-              child: Container(
-                  child: ClipRRect(
+            tag: widget.tag,
+            child: Container(
+              child: ClipRRect(
                 borderRadius: BorderRadius.circular(2),
-                child: CachedNetworkImage(
-                  width: 80,
-                  height: 120,
-                  placeholder: (context, url) {
-                    return ClipRRect(
-                      child: Image.asset(
-                        'images/movie_placeholder_image.png',
-                        width: 80,
-                        height: 120,
-                      ),
-                      borderRadius: BorderRadius.circular(2),
-                    );
-                  },
-                  imageUrl:
-                      '${Constants.image_prefix}/w200/${widget.item.poster_path}',
-                  fit: BoxFit.cover,
+                child: GestureDetector(
+                  onTap: showPoster,
+                  child: CachedNetworkImage(
+                    width: 80,
+                    height: 120,
+                    placeholder: (context, url) {
+                      return ClipRRect(
+                        child: Image.asset(
+                          'images/movie_placeholder_image.png',
+                          width: 80,
+                          height: 120,
+                        ),
+                        borderRadius: BorderRadius.circular(2),
+                      );
+                    },
+                    imageUrl:
+                        '${Constants.image_prefix}/w200/${widget.item.poster_path}',
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ))),
+              ),
+            ),
+          ),
           Container(
             margin: EdgeInsets.only(left: 5, top: 5),
             child: Column(
@@ -358,6 +363,36 @@ class MovieDetailPageState extends BaseState<MovieDetailPage>
                   color: Colors.white),
             ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    );
+  }
+
+  void showPoster() {
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(widget.item.title),
+            ),
+            body: SizedBox.expand(
+              child: Hero(
+                tag: widget.tag,
+                child: CachedNetworkImage(
+                  placeholder: (context, url) => Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  imageUrl:
+                      '${Constants.image_prefix}/w400/${widget.item.poster_path}',
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 

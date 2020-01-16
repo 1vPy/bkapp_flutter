@@ -59,7 +59,8 @@ class TvMainPageState extends BaseState<TvMainPage>
           margin: EdgeInsets.only(left: 15, bottom: 12),
           child: Text(
             _airTodayItems[index].name,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            style: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),
           ),
         )
       ],

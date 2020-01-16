@@ -15,32 +15,28 @@ class HomeDrawer extends StatefulWidget {
   const HomeDrawer(this._onSelected) : super();
 
   @override
-  State<StatefulWidget> createState() => HomeDrawerState(_onSelected);
+  State<StatefulWidget> createState() => HomeDrawerState();
 }
 
 class HomeDrawerState extends BaseState<HomeDrawer> {
-  Function _onSelected;
-
-  HomeDrawerState(this._onSelected);
-
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
         HeaderDrawer(),
         ListTile(title: Text('分类')),
-        ItemDrawer(0, '电视', Icon(Icons.tv), _onSelected),
-        ItemDrawer(1, '电影', Icon(Icons.movie), _onSelected),
-        ItemDrawer(2, '短视频', Icon(Icons.music_video), _onSelected),
+        ItemDrawer(0, '电视', Icon(Icons.tv), widget._onSelected),
+        ItemDrawer(1, '电影', Icon(Icons.movie), widget._onSelected),
+        ItemDrawer(2, '短视频', Icon(Icons.music_video), widget._onSelected),
         Divider(
           color: Colors.grey,
           height: 1.0,
         ),
         ListTile(title: Text('选项')),
-        ItemDrawer(3, '我的收藏', Icon(Icons.collections_bookmark), _onSelected),
-        ItemDrawer(4, '系统设置', Icon(Icons.settings), _onSelected),
-        ItemDrawer(5, '问题反馈', Icon(Icons.message), _onSelected),
-        ItemDrawer(6, '关于', Icon(Icons.info), _onSelected),
+        ItemDrawer(3, '我的收藏', Icon(Icons.collections_bookmark), widget._onSelected),
+        ItemDrawer(4, '系统设置', Icon(Icons.settings), widget._onSelected),
+        ItemDrawer(5, '问题反馈', Icon(Icons.message), widget._onSelected),
+        ItemDrawer(6, '关于', Icon(Icons.info), widget._onSelected),
       ],
     );
   }
@@ -56,26 +52,22 @@ class ItemDrawer extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() =>
-      ItemDrawerState(id, title, icon, _onSelected);
+      ItemDrawerState();
 }
 
 class ItemDrawerState extends BaseState<ItemDrawer> {
-  var id = 0;
-  var title = '';
-  var icon;
   var selected = false;
-  Function _onSelected;
 
-  ItemDrawerState(this.id, this.title, this.icon, this._onSelected) : super();
+  ItemDrawerState() : super();
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: icon,
-      title: Text(title),
+      leading: widget.icon,
+      title: Text(widget.title),
       selected: selected,
       onTap: () {
-        _onSelected(id);
+        widget._onSelected(widget.id);
       },
     );
   }
@@ -96,7 +88,9 @@ class HeaderDrawerState extends BaseState<HeaderDrawer> {
   }
 
   void registerEvent() {
-    EventBusUtil.instance.eventBus.on<UserLoginStatusChangeEvent>().listen((event) {
+    EventBusUtil.instance.eventBus
+        .on<UserLoginStatusChangeEvent>()
+        .listen((event) {
       getUserInfo();
     });
   }
