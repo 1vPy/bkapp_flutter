@@ -1,3 +1,5 @@
+import 'package:flare_flutter/flare_actor.dart';
+import 'package:flare_flutter/flare_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -66,7 +68,15 @@ class ListHelper {
 
   static Widget createLoading() {
     return Center(
-      child: Row(children: <Widget>[
+      child: SizedBox(
+        width: 50,
+        height: 30,
+        child: FlareActor(
+          'assets/Loading.flr',
+          animation: 'Loading',
+        ),
+      ),
+/*      child: Row(children: <Widget>[
         SizedBox(
             width: 20,
             height: 20,
@@ -79,7 +89,7 @@ class ListHelper {
           ),
           margin: EdgeInsets.only(left: 10),
         )
-      ], mainAxisAlignment: MainAxisAlignment.center),
+      ], mainAxisAlignment: MainAxisAlignment.center),*/
     );
   }
 

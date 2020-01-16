@@ -5,6 +5,7 @@ import 'package:bkapp_flutter/page/base_state.dart';
 import 'package:bkapp_flutter/utils/event_bus_util.dart';
 import 'package:bkapp_flutter/utils/storage_util.dart';
 import 'package:bkapp_flutter/utils/theme_util.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 
 class SystemSettingPage extends StatefulWidget {
@@ -55,25 +56,36 @@ class SystemSettingPageState extends BaseState<SystemSettingPage> {
                         ListTile(
                           title: Text('开'),
                           onTap: () {
-                            Constants.isDarkTheme =
-                                Constants.themeMode[ThemeType.DARK];
-                            StorageUtil.instance.saveInt('isDarkTheme',
-                                Constants.themeMode[ThemeType.DARK]);
-                            EventBusUtil.instance.eventBus
-                                .fire(AppThemeChangeEvent());
                             Navigator.of(context).pop();
+
+                            if (Constants.isDarkTheme !=
+                                Constants.themeMode[ThemeType.DARK]) {
+                              Constants.isDarkTheme =
+                                  Constants.themeMode[ThemeType.DARK];
+                              StorageUtil.instance.saveInt('isDarkTheme',
+                                  Constants.themeMode[ThemeType.DARK]);
+                              EventBusUtil.instance.eventBus
+                                  .fire(AppThemeChangeEvent());
+                              showSwitchAnim(true);
+                            }
                           },
                         ),
                         ListTile(
                           title: Text('关'),
                           onTap: () {
-                            Constants.isDarkTheme =
-                                Constants.themeMode[ThemeType.LIGHT];
-                            StorageUtil.instance.saveInt('isDarkTheme',
-                                Constants.themeMode[ThemeType.LIGHT]);
-                            EventBusUtil.instance.eventBus
-                                .fire(AppThemeChangeEvent());
                             Navigator.of(context).pop();
+
+                            if (Constants.isDarkTheme !=
+                                Constants.themeMode[ThemeType.LIGHT]) {
+                              Constants.isDarkTheme =
+                                  Constants.themeMode[ThemeType.LIGHT];
+                              StorageUtil.instance.saveInt('isDarkTheme',
+                                  Constants.themeMode[ThemeType.LIGHT]);
+                              EventBusUtil.instance.eventBus
+                                  .fire(AppThemeChangeEvent());
+
+                              showSwitchAnim(false);
+                            }
                           },
                         ),
                       ],
@@ -92,5 +104,23 @@ class SystemSettingPageState extends BaseState<SystemSettingPage> {
         ],
       ),
     );
+  }
+
+  void showSwitchAnim(bool toDark) {
+    Navigator.push(context, PageRouteBuilder(pageBuilder: (BuildContext context,
+        Animation animation, Animation secondaryAnimation) {
+      return FadeTransition(
+          opacity: animation,
+          child: Container(
+            child: FlareActor(
+              'assets/ModeSwitcher.flr',
+              fit: BoxFit.fill,
+              animation: toDark ? 'Dark to light' : 'Light to dark',
+              callback: (name) {
+                Navigator.of(context).pop();
+              },
+            ),
+          ));
+    }));
   }
 }
