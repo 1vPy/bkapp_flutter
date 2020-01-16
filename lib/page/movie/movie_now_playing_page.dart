@@ -100,8 +100,15 @@ class MovieNowPlayingPageState extends BaseState<MovieNowPlayingPage>
   }
 
   void _toDetail(Results item) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => MovieDetailPage(item, 'nowPlaying${item.id}')));
+    Navigator.push(context, PageRouteBuilder(pageBuilder: (BuildContext context,
+        Animation animation, Animation secondaryAnimation) {
+      return FadeTransition(
+          opacity: animation,
+          child: MovieDetailPage(item, 'nowPlaying${item.id}'));
+    }));
+
+//    Navigator.of(context).push(MaterialPageRoute(
+//        builder: (context) => MovieDetailPage(item, 'nowPlaying${item.id}')));
   }
 
   @override

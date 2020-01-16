@@ -102,8 +102,18 @@ class MovieUpcomingPageState extends BaseState<MovieUpcomingPage>
   }
 
   void _toDetail(Results item) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => MovieDetailPage(item, 'upComing${item.id}')));
+    Navigator.push(context, PageRouteBuilder(pageBuilder: (BuildContext context,
+        Animation animation, Animation secondaryAnimation) {
+      return SlideTransition(
+          position: Tween<Offset>(
+              begin: Offset(1.0, 0.0),
+              end: Offset(0.0, 0.0)
+          ).animate(CurvedAnimation(parent: animation, curve: Curves.decelerate)),
+           child: MovieDetailPage(item, 'nowPlaying${item.id}'));
+    }));
+
+//    Navigator.of(context).push(MaterialPageRoute(
+//        builder: (context) => MovieDetailPage(item, 'upComing${item.id}')));
   }
 
   @override

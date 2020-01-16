@@ -265,8 +265,15 @@ class TvMainPageState extends BaseState<TvMainPage>
   }
 
   void toTvRankPage(title) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => TvRankPage(title)));
+    Navigator.push(context, PageRouteBuilder(pageBuilder: (BuildContext context,
+        Animation animation, Animation secondaryAnimation) {
+      return ScaleTransition(
+          scale: animation,
+          alignment: Alignment.center,
+          child: TvRankPage(title));
+    }));
+/*    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => TvRankPage(title)));*/
   }
 
   void _onRetry() {
