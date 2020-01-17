@@ -223,6 +223,7 @@ class ShortVideoItemState extends BaseState<ShortVideoItem> {
       ),
       onTap: () {
         if (!_videoPlayerController.value.initialized) {
+          playVideo();
           return;
         }
         if (_videoPlayerController.value.isPlaying) {
