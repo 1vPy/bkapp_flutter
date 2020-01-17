@@ -25,6 +25,7 @@ class MyAppState extends BaseState<MyApp> {
     super.initState();
     DBUtil().initDb();
     setMode();
+    setPlayMode();
   }
 
   void setMode() async {
@@ -32,6 +33,12 @@ class MyAppState extends BaseState<MyApp> {
     Constants.isDarkTheme = await StorageUtil.instance.getInt('isDarkTheme') ??
         Constants.themeMode[ThemeType.FOLLOW_SYSTEM];
     EventBusUtil.instance.eventBus.fire(AppThemeChangeEvent());
+  }
+
+  void setPlayMode() async {
+    print(await StorageUtil.instance.getBool('playInMobile'));
+    Constants.playInMobile =
+        await StorageUtil.instance.getBool('playInMobile') ?? false;
   }
 
   @override

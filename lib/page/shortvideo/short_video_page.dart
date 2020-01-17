@@ -1,10 +1,13 @@
+import 'package:bkapp_flutter/constants.dart';
 import 'package:bkapp_flutter/entity/shortvideo/short_video_list.dart';
 import 'package:bkapp_flutter/entity/shortvideo/item_list.dart';
 import 'package:bkapp_flutter/page/base_state.dart';
 import 'package:bkapp_flutter/presenter/shotvideo/short_video_presenter.dart';
 import 'package:bkapp_flutter/presenter/shotvideo/impl/short_video_presenter_impl.dart';
+import 'package:bkapp_flutter/utils/storage_util.dart';
 import 'package:bkapp_flutter/view/shortvideo/short_video_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/src/dio_error.dart';
 import 'package:flutter/material.dart';
@@ -104,12 +107,44 @@ class ShortVideoItemState extends BaseState<ShortVideoItem> {
   VideoPlayerController _videoPlayerController;
   bool isPlaying = false;
   bool isFavorite = false;
+  bool cbMobilePlay = false;
+  bool isShowDialog = false;
+  ConnectivityResult currentConnection = ConnectivityResult.none;
 
   @override
   void initState() {
     super.initState();
     _videoPlayerController =
         VideoPlayerController.network(widget._item.data.playUrl);
+    checkNetwork();
+  }
+
+  void checkNetwork() async {
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult event) {
+      if (currentConnection != ConnectivityResult.wifi &&
+          event == ConnectivityResult.wifi &&
+          !_videoPlayerController.value.initialized) {
+        currentConnection = ConnectivityResult.wifi;
+        if (isShowDialog) {
+          isShowDialog = false;
+          Navigator.of(context).pop();
+        }
+        playVideo();
+      }
+    });
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      if (!Constants.playInMobile) {
+        showAskDialog();
+      } else {
+        playVideo();
+      }
+    } else if (connectivityResult == ConnectivityResult.wifi) {
+      playVideo();
+    }
+  }
+
+  void playVideo() {
     _videoPlayerController.initialize().then((value) {
       _videoPlayerController.play();
       setState(() {
@@ -205,6 +240,58 @@ class ShortVideoItemState extends BaseState<ShortVideoItem> {
     );
   }
 
+  void showAskDialog() {
+    isShowDialog = true;
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('提示'),
+            content: Text('当前为移动网络是否进行播放？'),
+            actions: <Widget>[
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  StatefulBuilder(builder: (context, StateSetter setState) {
+                    return Checkbox(
+                      value: this.cbMobilePlay,
+                      onChanged: (value) {
+                        setState(() {
+                          if (mounted) {
+                            this.cbMobilePlay = value;
+                          }
+                        });
+                      },
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    );
+                  }),
+                  Text('不再提醒'),
+                ],
+              ),
+              MaterialButton(
+                onPressed: () {
+                  playVideo();
+                  if (cbMobilePlay) {
+                    StorageUtil.instance.saveBool('playInMobile', true);
+                  }
+                  Constants.playInMobile = true;
+                  isShowDialog = false;
+                  Navigator.of(context).pop();
+                },
+                child: Text('确定'),
+              ),
+              MaterialButton(
+                onPressed: () {
+                  isShowDialog = false;
+                  Navigator.of(context).pop();
+                },
+                child: Text('取消'),
+              )
+            ],
+          );
+        });
+  }
+
   void showSharePanel() {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -215,8 +302,9 @@ class ShortVideoItemState extends BaseState<ShortVideoItem> {
           return Container(
             margin: EdgeInsets.only(left: 2, right: 2, bottom: 5),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                /*color: isDark ? Color(0xFF303030) : Colors.white*/),
+              borderRadius: BorderRadius.circular(10),
+              /*color: isDark ? Color(0xFF303030) : Colors.white*/
+            ),
             height: 70,
             child: Row(
               children: <Widget>[
@@ -278,8 +366,9 @@ class ShortVideoItemState extends BaseState<ShortVideoItem> {
           return Container(
             margin: EdgeInsets.only(left: 2, right: 2, bottom: 5),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                /*color: isDark ? Color(0xFF303030) : Colors.white*/),
+              borderRadius: BorderRadius.circular(10),
+              /*color: isDark ? Color(0xFF303030) : Colors.white*/
+            ),
             height: MediaQuery.of(context).size.height * 0.52,
             child: Column(
               children: <Widget>[],

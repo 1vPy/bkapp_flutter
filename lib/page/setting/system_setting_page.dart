@@ -42,6 +42,18 @@ class SystemSettingPageState extends BaseState<SystemSettingPage> {
     );
   }
 
+  Widget buildPlayModeSwitchItem() {
+    return ListTile(
+      title: Text(
+        '播放模式',
+      ),
+      trailing: Text(Constants.playInMobile ? 'wifi 和 移动网络' : '仅wifi'),
+      onTap: () {
+        showPlayModeSwitcher();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,9 +64,40 @@ class SystemSettingPageState extends BaseState<SystemSettingPage> {
         children: <Widget>[
           buildModeSwitchItem(),
           buildSeparator(),
+          buildPlayModeSwitchItem(),
+          buildSeparator(),
         ],
       ),
     );
+  }
+
+  void showPlayModeSwitcher() {
+    showModalBottomSheet(
+        builder: (BuildContext context) {
+          return ListView(
+            children: <Widget>[
+              ListTile(
+                title: Text('wifi 和 移动网络'),
+                onTap: () {
+                  Constants.playInMobile = true;
+                  StorageUtil.instance.saveBool('playInMobile', true);
+                  setState((){});
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                title: Text('仅wifi'),
+                onTap: () async {
+                  Constants.playInMobile = false;
+                  StorageUtil.instance.saveBool('playInMobile', false);
+                  setState((){});
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+        context: context);
   }
 
   void showModeSwitcher(parentContext) {
