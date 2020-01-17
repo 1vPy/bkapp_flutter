@@ -1,5 +1,6 @@
 //Created by 1vPy on 2020/1/16.
 import 'package:bkapp_flutter/component/home/home_drawer.dart';
+import 'package:bkapp_flutter/page/about_page.dart';
 import 'package:bkapp_flutter/page/base_state.dart';
 import 'package:bkapp_flutter/page/feedback_page.dart';
 import 'package:bkapp_flutter/page/movie/movie_main_page.dart';
@@ -8,7 +9,6 @@ import 'package:bkapp_flutter/page/setting/system_setting_page.dart';
 import 'package:bkapp_flutter/page/shortvideo/short_video_page.dart';
 import 'package:bkapp_flutter/page/tv/tv_main_page.dart';
 import 'package:flutter/material.dart';
-
 
 class HomePage extends StatefulWidget {
   @override
@@ -63,6 +63,10 @@ class HomePageState extends BaseState<HomePage> {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => FeedbackPage()));
         break;
+      case 6:
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => AboutPage()));
+        break;
     }
   }
 
@@ -75,12 +79,12 @@ class HomePageState extends BaseState<HomePage> {
         actions: <Widget>[
           title == '电影' || title == '电视'
               ? IconButton(
-            icon: Icon(Icons.search, size: 30),
-            onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => SearchPage()));
-            },
-          )
+                  icon: Icon(Icons.search, size: 30),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => SearchPage()));
+                  },
+                )
               : Container(),
         ],
       ),

@@ -78,8 +78,9 @@ class SplashPageState extends BaseState<SplashPage>
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         Timer(Duration(milliseconds: 500), () {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => HomePage()));
+          Navigator.pushReplacementNamed(context, '/homePage');
+//          Navigator.of(context).pushReplacement(
+//              MaterialPageRoute(builder: (context) => HomePage()));
         });
       }
     });

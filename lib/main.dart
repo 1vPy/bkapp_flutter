@@ -2,6 +2,7 @@ import 'package:bkapp_flutter/component/list_helper.dart';
 import 'package:bkapp_flutter/constants.dart';
 import 'package:bkapp_flutter/event/app_theme_change_event.dart';
 import 'package:bkapp_flutter/page/base_state.dart';
+import 'package:bkapp_flutter/page/home_page.dart';
 import 'package:bkapp_flutter/page/splash_page.dart';
 import 'package:bkapp_flutter/utils/db_util.dart';
 import 'package:bkapp_flutter/utils/event_bus_util.dart';
@@ -44,12 +45,18 @@ class MyAppState extends BaseState<MyApp> {
         footerBuilder: ListHelper.createFooter,
         child: isDark == Constants.themeMode[ThemeType.FOLLOW_SYSTEM]
             ? MaterialApp(
+                routes: {
+                  '/homePage': (context) => HomePage(),
+                },
                 title: 'Flutter Demo',
                 darkTheme: ThemeData.dark(),
                 theme: ThemeData.light(),
                 home: SplashPage(),
               )
             : MaterialApp(
+                routes: {
+                  '/homePage': (context) => HomePage(),
+                },
                 title: 'Flutter Demo',
                 theme: isDark == Constants.themeMode[ThemeType.DARK]
                     ? ThemeData.dark()

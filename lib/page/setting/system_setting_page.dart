@@ -18,6 +18,30 @@ class SystemSettingPage extends StatefulWidget {
 class SystemSettingPageState extends BaseState<SystemSettingPage> {
   int isDarkTheme = Constants.isDarkTheme;
 
+  Widget buildSeparator() {
+    return Container(
+      width: 200,
+      height: 1,
+    );
+  }
+
+  Widget buildModeSwitchItem() {
+    return ListTile(
+      title: Text(
+        '深色主题',
+      ),
+      trailing: Text(
+          Constants.isDarkTheme == Constants.themeMode[ThemeType.FOLLOW_SYSTEM]
+              ? '跟随系统'
+              : Constants.isDarkTheme == Constants.themeMode[ThemeType.DARK]
+                  ? '开'
+                  : '关'),
+      onTap: () {
+        showModeSwitcher(context);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,95 +50,78 @@ class SystemSettingPageState extends BaseState<SystemSettingPage> {
       ),
       body: ListView(
         children: <Widget>[
-          ListTile(
-            title: Text(
-              '深色主题',
-            ),
-            trailing: Text(Constants.isDarkTheme ==
-                    Constants.themeMode[ThemeType.FOLLOW_SYSTEM]
-                ? '跟随系统'
-                : Constants.isDarkTheme == Constants.themeMode[ThemeType.DARK]
-                    ? '开'
-                    : '关'),
-            onTap: () {
-              showModalBottomSheet(
-                  builder: (BuildContext context) {
-                    return ListView(
-                      children: <Widget>[
-                        ListTile(
-                          title: Text('跟随系统'),
-                          onTap: () {
-                            Constants.isDarkTheme =
-                                Constants.themeMode[ThemeType.FOLLOW_SYSTEM];
-                            StorageUtil.instance.saveInt('isDarkTheme',
-                                Constants.themeMode[ThemeType.FOLLOW_SYSTEM]);
-                            EventBusUtil.instance.eventBus
-                                .fire(AppThemeChangeEvent());
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        ListTile(
-                          title: Text('开'),
-                          onTap: () {
-                            Navigator.of(context).pop();
-
-                            if (Constants.isDarkTheme !=
-                                Constants.themeMode[ThemeType.DARK]) {
-                              Constants.isDarkTheme =
-                                  Constants.themeMode[ThemeType.DARK];
-                              StorageUtil.instance.saveInt('isDarkTheme',
-                                  Constants.themeMode[ThemeType.DARK]);
-                              EventBusUtil.instance.eventBus
-                                  .fire(AppThemeChangeEvent());
-                              showSwitchAnim(true);
-                            }
-                          },
-                        ),
-                        ListTile(
-                          title: Text('关'),
-                          onTap: () {
-                            Navigator.of(context).pop();
-
-                            if (Constants.isDarkTheme !=
-                                Constants.themeMode[ThemeType.LIGHT]) {
-                              Constants.isDarkTheme =
-                                  Constants.themeMode[ThemeType.LIGHT];
-                              StorageUtil.instance.saveInt('isDarkTheme',
-                                  Constants.themeMode[ThemeType.LIGHT]);
-                              EventBusUtil.instance.eventBus
-                                  .fire(AppThemeChangeEvent());
-
-                              showSwitchAnim(false);
-                            }
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                  context: context);
-            },
-          ),
-          Container(
-            width: 200,
-            height: 1,
-/*            color: isDark
-                ? ThemeUtil.instance.darkTheme['separator']
-                : ThemeUtil.instance.lightTheme['separator'],*/
-          )
+          buildModeSwitchItem(),
+          buildSeparator(),
         ],
       ),
     );
   }
 
-  void showSwitchAnim(bool toDark) {
-    Navigator.push(context, PageRouteBuilder(pageBuilder: (BuildContext context,
-        Animation animation, Animation secondaryAnimation) {
+  void showModeSwitcher(parentContext) {
+    showModalBottomSheet(
+        builder: (BuildContext context) {
+          return ListView(
+            children: <Widget>[
+              ListTile(
+                title: Text('跟随系统'),
+                onTap: () {
+                  Constants.isDarkTheme =
+                      Constants.themeMode[ThemeType.FOLLOW_SYSTEM];
+                  StorageUtil.instance.saveInt('isDarkTheme',
+                      Constants.themeMode[ThemeType.FOLLOW_SYSTEM]);
+                  EventBusUtil.instance.eventBus.fire(AppThemeChangeEvent());
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                title: Text('开'),
+                onTap: () async {
+                  Navigator.of(context).pop();
+
+                  if (Constants.isDarkTheme !=
+                      Constants.themeMode[ThemeType.DARK]) {
+                    Constants.isDarkTheme = Constants.themeMode[ThemeType.DARK];
+                    StorageUtil.instance.saveInt(
+                        'isDarkTheme', Constants.themeMode[ThemeType.DARK]);
+                    await showSwitchAnim(true, parentContext);
+
+                    EventBusUtil.instance.eventBus.fire(AppThemeChangeEvent());
+                  }
+                },
+              ),
+              ListTile(
+                title: Text('关'),
+                onTap: () async {
+                  Navigator.of(context).pop();
+
+                  if (Constants.isDarkTheme !=
+                      Constants.themeMode[ThemeType.LIGHT]) {
+                    Constants.isDarkTheme =
+                        Constants.themeMode[ThemeType.LIGHT];
+                    StorageUtil.instance.saveInt(
+                        'isDarkTheme', Constants.themeMode[ThemeType.LIGHT]);
+                    await showSwitchAnim(false, parentContext);
+
+                    EventBusUtil.instance.eventBus.fire(AppThemeChangeEvent());
+                  }
+                },
+              ),
+            ],
+          );
+        },
+        context: context);
+  }
+
+  Future showSwitchAnim(bool toDark, parentContext) {
+    return Navigator.push(parentContext, PageRouteBuilder(pageBuilder:
+        (BuildContext context, Animation animation,
+            Animation secondaryAnimation) {
       return FadeTransition(
           opacity: animation,
           child: Container(
             child: FlareActor(
               'assets/ModeSwitcher.flr',
-              fit: BoxFit.fill,
+              fit: BoxFit.fitHeight,
               animation: toDark ? 'Dark to light' : 'Light to dark',
               callback: (name) {
                 Navigator.of(context).pop();
